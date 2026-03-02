@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RemoteEDI.com — Remote EDI Jobs, Delivered Daily</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0b0f0e;
+    --bg2:       #111817;
+    --bg3:       #161e1c;
+    --green:     #00e5a0;
+    --green-dim: #00e5a022;
+    --green-mid: #00e5a055;
+    --white:     #eef2f0;
+    --muted:     #6b7f79;
+    --border:    #1e2e2a;
+    --red:       #ff5c5c;
+    --yellow:    #ffc857;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(11,15,14,.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: var(--mono);
+    font-size: .95rem;
+    color: var(--green);
+    letter-spacing: .04em;
+    text-decoration: none;
+  }
+  .logo span { color: var(--muted); }
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: .8rem;
+    color: var(--bg);
+    background: var(--green);
+    border: none; cursor: pointer;
+    padding: .45rem 1.1rem;
+    text-decoration: none;
+    transition: opacity .2s;
+  }
+  .nav-cta:hover { opacity: .8; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 7rem 1.5rem 4rem;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  /* grid background */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: .5;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 80%);
+  }
+
+  /* glow */
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, var(--green-mid) 0%, transparent 70%);
+    top: 30%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none;
+    animation: pulse 4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: .4; transform: translate(-50%,-50%) scale(1); }
+    50%      { opacity: .7; transform: translate(-50%,-50%) scale(1.1); }
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 760px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--mono); font-size: .75rem;
+    color: var(--green);
+    border: 1px solid var(--green-mid);
+    background: var(--green-dim);
+    padding: .3rem .9rem;
+    margin-bottom: 1.8rem;
+    letter-spacing: .08em;
+  }
+  .badge-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    animation: blink 1.2s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  h1 {
+    font-family: var(--mono);
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -.02em;
+    color: var(--white);
+    margin-bottom: 1.2rem;
+  }
+  h1 em { color: var(--green); font-style: normal; }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: #98b0aa;
+    max-width: 520px;
+    margin: 0 auto 2.4rem;
+    font-weight: 300;
+  }
+
+  /* ── EMAIL FORM ── */
+  .signup-form {
+    display: flex; gap: 0;
+    max-width: 480px; width: 100%; margin: 0 auto 1rem;
+  }
+  .signup-form input {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-right: none;
+    color: var(--white);
+    font-family: var(--mono); font-size: .85rem;
+    padding: .85rem 1rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .signup-form input::placeholder { color: var(--muted); }
+  .signup-form input:focus { border-color: var(--green); }
+  .signup-form button {
+    background: var(--green);
+    border: none; cursor: pointer;
+    font-family: var(--mono); font-size: .8rem; font-weight: 600;
+    color: var(--bg);
+    padding: .85rem 1.4rem;
+    white-space: nowrap;
+    transition: opacity .2s;
+  }
+  .signup-form button:hover { opacity: .85; }
+
+  .social-proof {
+    font-family: var(--mono); font-size: .75rem;
+    color: var(--muted);
+    letter-spacing: .04em;
+  }
+  .social-proof strong { color: var(--green); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    padding: 2rem 1.5rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono); font-size: 1.8rem; font-weight: 600;
+    color: var(--green);
+    display: block;
+  }
+  .stat-label { font-size: .8rem; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+
+  /* ── SECTIONS ── */
+  section { padding: 5rem 1.5rem; }
+  .container { max-width: 900px; margin: 0 auto; }
+
+  .section-label {
+    font-family: var(--mono); font-size: .72rem;
+    color: var(--green); letter-spacing: .14em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-family: var(--mono); font-size: clamp(1.4rem, 3vw, 2.1rem);
+    font-weight: 600; line-height: 1.25;
+    margin-bottom: 1.2rem;
+  }
+  .section-sub { color: #98b0aa; max-width: 560px; font-size: 1rem; font-weight: 300; }
+
+  /* ── PROBLEM ── */
+  .problem { background: var(--bg2); }
+  .pain-list {
+    margin-top: 2.5rem;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  .pain-item {
+    display: flex; align-items: flex-start; gap: .9rem;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+  }
+  .pain-icon { font-size: 1.1rem; margin-top: .05rem; flex-shrink: 0; }
+  .pain-text { font-size: .95rem; color: #b8ccc6; }
+
+  /* ── HOW IT WORKS ── */
+  .how { background: var(--bg); }
+  .steps {
+    margin-top: 2.5rem;
+    display: grid; gap: 1px;
+    border: 1px solid var(--border);
+  }
+  .step {
+    display: flex; align-items: flex-start; gap: 1.4rem;
+    padding: 1.4rem 1.6rem;
+    background: var(--bg3);
+    transition: background .2s;
+  }
+  .step:hover { background: #1a2523; }
+  .step-num {
+    font-family: var(--mono); font-size: .75rem;
+    color: var(--green); border: 1px solid var(--green-mid);
+    background: var(--green-dim);
+    width: 30px; height: 30px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-title { font-family: var(--mono); font-size: .9rem; font-weight: 600; margin-bottom: .3rem; }
+  .step-desc { font-size: .9rem; color: #98b0aa; }
+
+  /* ── SPECIALIZATIONS ── */
+  .specs { background: var(--bg2); }
+  .spec-grid {
+    margin-top: 2.5rem;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  .spec-card {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    transition: border-color .2s, transform .2s;
+    cursor: default;
+  }
+  .spec-card:hover { border-color: var(--green-mid); transform: translateY(-3px); }
+  .spec-icon { font-size: 1.5rem; margin-bottom: .7rem; }
+  .spec-name { font-family: var(--mono); font-size: .85rem; color: var(--green); margin-bottom: .4rem; }
+  .spec-desc { font-size: .82rem; color: var(--muted); }
+
+  /* ── PRICING ── */
+  .pricing { background: var(--bg); }
+  .pricing-grid {
+    margin-top: 2.5rem;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  .pricing-card {
+    padding: 2rem;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+  }
+  .pricing-card.featured {
+    border-color: var(--green);
+    background: #0e1a18;
+  }
+  .pricing-tag {
+    font-family: var(--mono); font-size: .7rem;
+    color: var(--bg); background: var(--green);
+    padding: .2rem .6rem; display: inline-block; margin-bottom: 1rem;
+    letter-spacing: .06em;
+  }
+  .price { font-family: var(--mono); font-size: 2.4rem; font-weight: 600; color: var(--white); }
+  .price-period { font-size: .85rem; color: var(--muted); font-family: var(--sans); }
+  .pricing-desc { margin: .8rem 0 1.4rem; color: #98b0aa; font-size: .9rem; }
+  .pricing-features { list-style: none; display: grid; gap: .5rem; }
+  .pricing-features li { font-size: .88rem; color: #b8ccc6; padding-left: 1.2rem; position: relative; }
+  .pricing-features li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-family: var(--mono); }
+  .pricing-btn {
+    display: block; text-align: center; margin-top: 1.8rem;
+    font-family: var(--mono); font-size: .82rem;
+    padding: .75rem;
+    text-decoration: none;
+    transition: opacity .2s;
+  }
+  .pricing-btn-outline {
+    border: 1px solid var(--border);
+    color: var(--white);
+  }
+  .pricing-btn-outline:hover { border-color: var(--green); color: var(--green); }
+  .pricing-btn-solid {
+    background: var(--green); color: var(--bg);
+  }
+  .pricing-btn-solid:hover { opacity: .85; }
+
+  /* ── TESTIMONIAL ── */
+  .testimonial { background: var(--bg2); }
+  .quote-block {
+    max-width: 640px;
+    padding: 2.5rem;
+    border-left: 3px solid var(--green);
+    background: var(--bg3);
+    margin: 2.5rem auto 0;
+  }
+  .quote-text {
+    font-size: 1.05rem; line-height: 1.7; color: var(--white);
+    font-style: italic;
+    margin-bottom: 1.2rem;
+  }
+  .quote-author { font-family: var(--mono); font-size: .8rem; color: var(--green); }
+
+  /* ── FAQ ── */
+  .faq { background: var(--bg); }
+  .faq-list { margin-top: 2rem; display: grid; gap: 1px; border: 1px solid var(--border); }
+  .faq-item {
+    background: var(--bg3); padding: 1.4rem 1.6rem;
+    border-top: 1px solid var(--border);
+  }
+  .faq-item:first-child { border-top: none; }
+  .faq-q { font-family: var(--mono); font-size: .88rem; color: var(--green); margin-bottom: .5rem; }
+  .faq-a { font-size: .9rem; color: #98b0aa; }
+
+  /* ── CTA BOTTOM ── */
+  .cta-bottom {
+    background: var(--bg2);
+    text-align: center;
+    padding: 5rem 1.5rem;
+    position: relative; overflow: hidden;
+  }
+  .cta-bottom::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 200px;
+    background: radial-gradient(ellipse, var(--green-mid) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .cta-bottom .hero-content { max-width: 540px; }
+  .cta-bottom h2 { margin-bottom: 1rem; }
+  .cta-bottom .section-sub { margin: 0 auto 2rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+  .footer-note { font-family: var(--mono); font-size: .72rem; color: var(--muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    nav { padding: .9rem 1.2rem; }
+    .signup-form { flex-direction: column; }
+    .signup-form input { border-right: 1px solid var(--border); border-bottom: none; }
+    .signup-form button { width: 100%; }
+    .stats-bar { gap: 1.5rem; }
+  }
+
+  /* ── FADE IN ── */
+  .fade-in {
+    opacity: 0; transform: translateY(18px);
+    animation: fadeUp .6s ease forwards;
+  }
+  @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+  .delay-1 { animation-delay: .15s; }
+  .delay-2 { animation-delay: .3s; }
+  .delay-3 { animation-delay: .45s; }
+  .delay-4 { animation-delay: .6s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">remote<span>EDI</span>.com</a>
+  <a class="nav-cta" href="#signup">Get Free Alerts</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-content">
+    <div class="badge fade-in">
+      <span class="badge-dot"></span>
+      LAUNCHING MARCH 2026 — JOIN WAITLIST
+    </div>
+    <h1 class="fade-in delay-1">Remote EDI Jobs,<br><em>Delivered Daily</em> 🔔</h1>
+    <p class="hero-sub fade-in delay-2">
+      Stop checking 15+ job boards. Get every new remote EDI position —
+      X12, EDIFACT, Healthcare, SAP — in one morning email.
+    </p>
+
+    <form class="signup-form fade-in delay-3" id="signup" onsubmit="handleSignup(event)">
+      <input type="email" placeholder="your@email.com" required id="email-input">
+      <button type="submit">Join Free →</button>
+    </form>
+    <p class="social-proof fade-in delay-4">Join <strong>247</strong> EDI professionals on the waitlist</p>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-num">480+</span>
+    <span class="stat-label">Active Remote EDI Jobs</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">20+</span>
+    <span class="stat-label">Job Boards Scanned</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">$80–220k</span>
+    <span class="stat-label">Typical Salary Range</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">8 AM</span>
+    <span class="stat-label">Daily Digest (EST)</span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="container">
+    <p class="section-label">// the problem</p>
+    <h2>Tired of missing<br>the right EDI role?</h2>
+    <p class="section-sub">Finding remote EDI work means checking a dozen boards that treat you like a generic dev. That ends now.</p>
+    <div class="pain-list">
+      <div class="pain-item">
+        <span class="pain-icon">❌</span>
+        <span class="pain-text">Missing EDI Analyst roles because LinkedIn's algorithm buried them under unrelated postings</span>
+      </div>
+      <div class="pain-item">
+        <span class="pain-icon">❌</span>
+        <span class="pain-text">Checking FlexJobs, Indeed, LinkedIn, and RemoteOK every single day — manually</span>
+      </div>
+      <div class="pain-item">
+        <span class="pain-icon">❌</span>
+        <span class="pain-text">Seeing "Entry Level" postings when you're a Senior EDI Specialist with 10 years experience</span>
+      </div>
+      <div class="pain-item">
+        <span class="pain-icon">❌</span>
+        <span class="pain-text">Generic "tech jobs" mixed in with actual EDI expertise roles — noise drowning the signal</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="container">
+    <p class="section-label">// how remoteedi.com works</p>
+    <h2>Precision-filtered EDI jobs,<br>zero noise</h2>
+    <p class="section-sub">We do the tedious work so you can focus on applying to the right roles.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div>
+          <div class="step-title">Scan 20+ job boards daily</div>
+          <div class="step-desc">Indeed, FlexJobs, WorkingNomads, RemoteOK, WeWorkRemotely + company career pages — all before 6 AM EST.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div>
+          <div class="step-title">Filter for TRUE EDI roles</div>
+          <div class="step-desc">We only keep positions requiring real EDI knowledge: X12, EDIFACT, 837/835, SAP IDocs, AS2, SFTP. No "EDI experience a plus" fluff.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div>
+          <div class="step-title">Categorize by specialization</div>
+          <div class="step-desc">Healthcare EDI · Logistics · SAP EDI · Consulting. Every job tagged so you skip what's irrelevant.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div>
+          <div class="step-title">Deliver to your inbox at 8 AM</div>
+          <div class="step-desc">Fresh daily digest, every morning. Apply before the crowd even opens LinkedIn.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECIALIZATIONS -->
+<section class="specs">
+  <div class="container">
+    <p class="section-label">// we understand edi niches</p>
+    <h2>Your specialization,<br>not "EDI developer" catch-all</h2>
+    <p class="section-sub">We know the difference between an EDI Coordinator and an EDI Developer. Finally.</p>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-icon">🏥</div>
+        <div class="spec-name">Healthcare EDI</div>
+        <div class="spec-desc">837, 835, 834, 270/271 transactions. HIPAA compliance roles.</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">🔷</div>
+        <div class="spec-name">SAP EDI</div>
+        <div class="spec-desc">IDoc, IDOC mappings, SAP PI/PO. Developer & Consultant roles.</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">🚚</div>
+        <div class="spec-name">Logistics & Retail</div>
+        <div class="spec-desc">850 PO, 856 ASN, 810 Invoice. Walmart, Amazon supplier EDI.</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">⚙️</div>
+        <div class="spec-name">EDI Developer</div>
+        <div class="spec-desc">X12, EDIFACT, AS2, SFTP. Mapping, integration, middleware.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing">
+  <div class="container">
+    <p class="section-label">// pricing</p>
+    <h2>Simple, transparent pricing</h2>
+    <p class="section-sub">Job seekers always free. Employers reach the most qualified EDI talent pool anywhere.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tag">JOB SEEKERS</div>
+        <div class="price">FREE <span class="price-period">forever</span></div>
+        <p class="pricing-desc">Daily digest of remote EDI jobs, filtered and categorized for you.</p>
+        <ul class="pricing-features">
+          <li>Daily 8 AM email digest</li>
+          <li>All EDI specializations</li>
+          <li>Salary info when available</li>
+          <li>Direct apply links</li>
+          <li>Contract + full-time roles</li>
+        </ul>
+        <a href="#signup" class="pricing-btn pricing-btn-outline">Get Free Alerts →</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-tag">EMPLOYERS</div>
+        <div class="price">$199 <span class="price-period">/ 30 days</span></div>
+        <p class="pricing-desc">List your role to 2,000+ qualified EDI specialists. No PPC, flat fee.</p>
+        <ul class="pricing-features">
+          <li>Featured in daily email digest</li>
+          <li>30-day listing on site</li>
+          <li>Categorized by specialization</li>
+          <li>Direct applicant contact</li>
+          <li>vs. Indeed's $5/click PPC</li>
+        </ul>
+        <a href="/cdn-cgi/l/email-protection#ee86879c8bae9c8b83819a8b8b8a87c099819c85d19d9b8c848b8d9ad3be819d9acbdcde8fcbdcdea4818c" class="pricing-btn pricing-btn-solid">I'm Hiring EDI Talent →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <div class="container">
+    <p class="section-label">// what edi professionals say</p>
+    <h2>Built by someone who<br>gets it</h2>
+    <div class="quote-block">
+      <p class="quote-text">"Finally, a job board that understands the difference between an EDI Coordinator and an EDI Developer. No more wading through React jobs just to find a 835 remittance role."</p>
+      <div class="quote-author">— Sarah K. · Healthcare EDI Analyst · Remote USA</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <p class="section-label">// faq</p>
+    <h2>Questions</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Q: When does this launch?</div>
+        <div class="faq-a">March 2026. Join the waitlist now for early access and the first job digest on day one.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Q: What makes this different from Indeed or LinkedIn?</div>
+        <div class="faq-a">We ONLY do EDI. Every single job is a genuine EDI role. No noise, no "EDI a plus", no random tech jobs. Perfect filtering for Healthcare, SAP, Logistics, and more.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Q: Do you cover EDI contract and freelance work too?</div>
+        <div class="faq-a">Yes. Full-time remote, contract, and consulting gigs — all in one digest, all clearly labeled.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Q: How do you find the jobs?</div>
+        <div class="faq-a">Automated daily scanning of 20+ job boards (Indeed, FlexJobs, WorkingNomads, RemoteOK, WeWorkRemotely, and more) plus direct company career pages. Run every morning before 6 AM EST.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Q: I'm an employer. How quickly does my listing go live?</div>
+        <div class="faq-a">Within 24 hours. Your role appears in the next morning's email digest and stays live on the site for 30 days.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BOTTOM -->
+<section class="cta-bottom">
+  <div class="hero-content" style="position:relative;z-index:1">
+    <p class="section-label">// ready?</p>
+    <h2>Join 247 EDI professionals<br>on the waitlist</h2>
+    <p class="section-sub" style="margin:0 auto 2rem">Free forever for job seekers. First digest drops March 2026.</p>
+    <form class="signup-form" style="margin:0 auto" onsubmit="handleSignup(event)">
+      <input type="email" placeholder="your@email.com" required>
+      <button type="submit">Get Free Alerts →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">remoteEDI.com</span>
+  <span class="footer-note">© 2026 · For employers: hire@remoteedi.com</span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  function handleSignup(e) {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.querySelector('input[type=email]').value;
+    const btn = form.querySelector('button');
+
+    // Tutaj podłączysz Mailchimp API lub Carrd form
+    // Na razie: visual feedback
+    btn.textContent = '✓ You\'re on the list!';
+    btn.style.background = '#00b87a';
+    btn.disabled = true;
+    form.querySelector('input').disabled = true;
+
+    // Log email (replace with actual Mailchimp/Formspree call)
+    console.log('Signup:', email);
+
+    /*
+    ŻEBY POD
