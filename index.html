@@ -387,6 +387,15 @@
   .delay-3 { animation-delay: .45s; }
   .delay-4 { animation-delay: .6s; }
 </style>
+<!-- MailerLite Universal -->
+<script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2155997');
+</script>
+<!-- End MailerLite Universal -->
 </head>
 <body>
 
@@ -409,10 +418,7 @@
       X12, EDIFACT, Healthcare, SAP — in one morning email.
     </p>
 
-    <form class="signup-form fade-in delay-3" id="signup" onsubmit="handleSignup(event)">
-      <input type="email" placeholder="your@email.com" required id="email-input">
-      <button type="submit">Join Free →</button>
-    </form>
+    <div class="ml-embedded fade-in delay-3" data-form="jpnpzb"></div>
     <p class="social-proof fade-in delay-4">Join <strong>247</strong> EDI professionals on the waitlist</p>
   </div>
 </section>
@@ -619,10 +625,7 @@
     <p class="section-label">// ready?</p>
     <h2>Join 247 EDI professionals<br>on the waitlist</h2>
     <p class="section-sub" style="margin:0 auto 2rem">Free forever for job seekers. First digest drops March 2026.</p>
-    <form class="signup-form" style="margin:0 auto" onsubmit="handleSignup(event)">
-      <input type="email" placeholder="your@email.com" required>
-      <button type="submit">Get Free Alerts →</button>
-    </form>
+    <div class="ml-embedded" data-form="jpnpzb"></div>
   </div>
 </section>
 
@@ -632,47 +635,5 @@
   <span class="footer-note">© 2026 · For employers: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0f67667d6a4f7d6a62607b6a6a6b66216c6062">[email&#160;protected]</a></span>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  const ML_API_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNTliYTRhZTc2YjljNWE0Y2Q4OWU2ODE2MTlkMzJkZTE0ZDU4MzA0ODQ5OGJkNWIxODRkYTM5MGU1M2Q0MGY0MjUyMzRiNTYzYzhkODFmNDYiLCJpYXQiOjE3NzI1NDM1ODAuMzEwNjYxLCJuYmYiOjE3NzI1NDM1ODAuMzEwNjY0LCJleHAiOjQ5MjgyMTcxODAuMzAzNjIxLCJzdWIiOiIyMTc1MTYwIiwic2NvcGVzIjpbXX0.MPhPHWhc3p_i4VCK3fz5NezJ2oDgynldtELtCexRZSUfWzfFmKwEPXV-Nf2vV_lpY_1dAD1SHvW9_aVMVjUa0jELvC0k3GuBIkUN_cB3wXqLov_MLFvB8gNvBi9PAQtsTzpDMoFAeDLEfgCZ_OzIlULvw5blxGSXQ9YzvUj0vRm3YJk-pzyelIpukjBupnRtuv7-F9wDx4AxosOlr2i4_-D2_fIL-e-tKv8--s4CryFKiPQbVKa3-zAGHPz1bV3CTvDyY0KQ8cbe4ci31p8dOJcdFrAZMTgzX82GvpBCaulA8QHkukPAemT5VwqxoaPStkEwQr1ajQtgURhpowetm-VEsV1lyvUTm5VP3k9q7XPe0NKo3vPuHWXtG-F-icL5GvUXwUmc2LaP4eikNSepx_sTRP1FK0ScCzW84VKVnBWdPwGg2kwCmocADlTlqALQUFdH-ch9PPZiSd50DUwpr2-CWtTpGm5ve1dDBeNeXzKNi8_OiFTZFG9CRS2uUV8MH5_lu4fo6Ry7xflKFI3zDF2Wz8B4EQFcl9ZZ4A6DnnuV_fn8uCUrdHoLLb0u7VPfCN8uWysjhoV62erMASgMBhCPQXeCF0JXX8g5Uv7Pis6vb0iSrX1cdVeJhJ_8ydlW5RaeJ2_F9BPMrCoOQomXbDFKPBKmeAziX0fH9CB2jgo';
-  const ML_GROUP_ID = '180925199418394538';
-
-  async function handleSignup(e) {
-    e.preventDefault();
-    const form = e.target;
-    const email = form.querySelector('input[type=email]').value;
-    const btn = form.querySelector('button');
-
-    btn.textContent = 'Saving...';
-    btn.disabled = true;
-    form.querySelector('input').disabled = true;
-
-    try {
-      const res = await fetch('https://connect.mailerlite.com/api/subscribers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + ML_API_KEY
-        },
-        body: JSON.stringify({
-          email: email,
-          groups: [ML_GROUP_ID]
-        })
-      });
-
-      if (res.status === 200 || res.status === 201) {
-        btn.textContent = "You're on the list!";
-        btn.style.background = '#00b87a';
-      } else {
-        throw new Error('API error ' + res.status);
-      }
-    } catch (err) {
-      console.error(err);
-      btn.textContent = 'Try again';
-      btn.style.background = '#ff5c5c';
-      btn.disabled = false;
-      form.querySelector('input').disabled = false;
-    }
-  }
-</script>
-</body>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
 </html>
