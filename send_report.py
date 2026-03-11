@@ -154,30 +154,29 @@ def send_report(total: int, new_jobs: list, errors: list) -> None:
     </div>
     """
 
-    # Wysylka przez MailerLite transactional
-    payload = {
-        "from":    {"email": "hire@remoteedi.com", "name": "RemoteEDI Bot"},
-        "to":      [{"email": REPORT_EMAIL}],
-        "subject": f"[RemoteEDI] Daily report — {new_count} new jobs ({today})",
-        "html":    html_body,
-    }
+    # Wysylka przez Gmail SMTP
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
 
-    headers = {
-        "Authorization": f"Bearer {MAILERLITE_KEY}",
-        "Content-Type":  "application/json",
-    }
+    GMAIL_USER = os.environ.get("GMAIL_USER", "")
+    GMAIL_PASS = os.environ.get("GMAIL_PASS", "")
+
+    if not GMAIL_USER or not GMAIL_PASS:
+        print("  Brak GMAIL_USER lub GMAIL_PASS — pomijam wyslanie raportu")
+        return
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = f"[RemoteEDI] Daily report — {new_count} new jobs ({today})"
+    msg["From"]    = f"RemoteEDI Bot <{GMAIL_USER}>"
+    msg["To"]      = REPORT_EMAIL
+    msg.attach(MIMEText(html_body, "html"))
 
     try:
-        r = requests.post(
-            "https://connect.mailerlite.com/api/emails",
-            json=payload,
-            headers=headers,
-            timeout=15
-        )
-        if r.status_code in (200, 201):
-            print(f"  Raport wyslany na {REPORT_EMAIL}")
-        else:
-            print(f"  Blad wysylki raportu: {r.status_code} {r.text[:200]}")
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(GMAIL_USER, GMAIL_PASS)
+            server.sendmail(GMAIL_USER, REPORT_EMAIL, msg.as_string())
+        print(f"  Raport wyslany na {REPORT_EMAIL}")
     except Exception as e:
         print(f"  Blad wysylki: {e}")
 
