@@ -1,1 +1,55 @@
+name: Daily EDI Jobs Scraper
 
+on:
+  schedule:
+    - cron: '0 6 * * *'  # 06:00 UTC = 08:00 PL
+  workflow_dispatch:       # mozliwosc recznego uruchomienia z GitHub UI
+
+jobs:
+  scrape-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Pobierz repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2. Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. Zaleznosci
+      - name: Install dependencies
+        run: pip install requests
+
+      # 4. Uruchom scraper
+      - name: Run scraper
+        env:
+          ADZUNA_APP_ID:  ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          JSEARCH_KEY:    ${{ secrets.JSEARCH_KEY }}
+        run: python scraper_combined.py
+
+      # 5. Wygeneruj strone z jobami
+      - name: Generate jobs page
+        run: python generate_jobs_page.py
+
+      # 6. Wyslij raport email
+      - name: Send monitoring report
+        env:
+          MAILERLITE_KEY: ${{ secrets.MAILERLITE_KEY }}
+          REPORT_EMAIL:   ${{ secrets.REPORT_EMAIL }}
+        run: python send_report.py
+
+      # 7. Commit i push (jobs.html + CSV + seen_jobs.json)
+      - name: Commit updated files
+        run: |
+          git config user.name  "RemoteEDI Bot"
+          git config user.email "bot@remoteedi.com"
+          git add jobs.html edi_jobs_all.csv seen_jobs.json
+          git diff --staged --quiet || git commit -m "chore: daily jobs update $(date +'%Y-%m-%d')"
+          git push
