@@ -98,6 +98,26 @@ def send_report(total: int, new_jobs: list, errors: list) -> None:
     if errors:
         errors_html = f'<p style="color:#e17055;margin-top:1rem">⚠ Bledy: {", ".join(errors)}</p>'
 
+    if new_count == 0:
+        jobs_section = '<p style="color:#7a8c82;text-align:center;padding:1rem">No new jobs today.</p>'
+    else:
+        shown = min(new_count, 20)
+        jobs_section = f'''
+      <div style="font-size:0.9rem;color:#7a8c82;margin-bottom:0.75rem">New jobs ({shown} shown):</div>
+      <table style="width:100%;border-collapse:collapse;font-size:0.82rem;background:#111614;border-radius:8px;overflow:hidden">
+        <thead>
+          <tr style="color:#7a8c82;font-size:0.75rem">
+            <th style="padding:8px;text-align:left;border-bottom:1px solid #1e2926">Title</th>
+            <th style="padding:8px;text-align:left;border-bottom:1px solid #1e2926">Company</th>
+            <th style="padding:8px;text-align:left;border-bottom:1px solid #1e2926">Salary</th>
+            <th style="padding:8px;text-align:left;border-bottom:1px solid #1e2926">Location</th>
+            <th style="padding:8px;text-align:left;border-bottom:1px solid #1e2926">Type</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+      '''
+
     html_body = f"""
     <div style="background:#0b0f0e;color:#e8ede9;font-family:'DM Sans',sans-serif;padding:2rem;max-width:700px;margin:0 auto">
       <div style="font-family:monospace;color:#00e5a0;font-size:1.1rem;margin-bottom:1.5rem">
@@ -121,21 +141,7 @@ def send_report(total: int, new_jobs: list, errors: list) -> None:
         </tr>
       </table>
 
-      {'<p style="color:#7a8c82;text-align:center;padding:1rem">No new jobs today.</p>' if new_count == 0 else f"""
-      <div style="font-size:0.9rem;color:#7a8c82;margin-bottom:0.75rem">New jobs ({min(new_count, 20)} shown):</div>
-      <table style="width:100%;border-collapse:collapse;font-size:0.82rem;background:#111614;border-radius:8px;overflow:hidden">
-        <thead>
-          <tr style="color:#7a8c82;font-size:0.75rem">
-            <th style="padding:8px;text-align:left;border-bottom:1px solid #1e2926">Title</th>
-            <th style="padding:8px;text-align:left;border-bottom:1px solid #1e2926">Company</th>
-            <th style="padding:8px;text-align:left;border-bottom:1px solid #1e2926">Salary</th>
-            <th style="padding:8px;text-align:left;border-bottom:1px solid #1e2926">Location</th>
-            <th style="padding:8px;text-align:left;border-bottom:1px solid #1e2926">Type</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
-      """}
+      {jobs_section}
 
       {errors_html}
 
