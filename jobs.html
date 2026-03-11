@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote EDI Jobs — 75 Open Positions | RemoteEDI.com</title>
+  <meta name="description" content="Browse 75 remote EDI jobs. Curated daily from top job boards. Healthcare EDI, SAP, logistics, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0b0f0e;
+      --bg2:       #111614;
+      --bg3:       #1a1f1e;
+      --accent:    #00e5a0;
+      --accent2:   #00b87a;
+      --text:      #e8ede9;
+      --muted:     #7a8c82;
+      --border:    #1e2926;
+      --card-bg:   #131817;
+      --radius:    10px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--muted); }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent);
+      color: #000 !important;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem !important;
+    }
+
+    /* ── HERO ── */
+    .page-hero {
+      padding: 3rem 2rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .page-hero h1 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .page-hero h1 em {
+      color: var(--accent);
+      font-style: normal;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .page-hero p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .updated {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.75rem;
+    }
+    .updated span { color: var(--accent); }
+
+    /* ── FILTERS ── */
+    .filters {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem 1.5rem;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.6rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-box:focus { border-color: var(--accent); }
+    .search-box::placeholder { color: var(--muted); }
+
+    select {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.6rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    select:focus { border-color: var(--accent); }
+
+    .results-count {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-left: auto;
+      white-space: nowrap;
+    }
+    .results-count span { color: var(--accent); }
+
+    /* ── GRID ── */
+    .jobs-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1rem;
+    }
+
+    /* ── CARD ── */
+    .job-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .job-card:hover {
+      border-color: #2a3530;
+      transform: translateY(-2px);
+    }
+    .job-card.hidden { display: none; }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .spec-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      border: 1px solid;
+      font-family: 'IBM Plex Mono', monospace;
+      white-space: nowrap;
+    }
+
+    .job-date {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
+      white-space: nowrap;
+    }
+
+    .job-title {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    .job-company {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .job-meta {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .job-location {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .salary {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .job-source {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .apply-btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.35rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .apply-btn:hover {
+      background: var(--accent);
+      color: #000;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--muted);
+    }
+    .empty-state h3 { font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .filters { padding: 0 1rem 1rem; }
+      .jobs-grid { padding: 0 1rem 3rem; grid-template-columns: 1fr; }
+      .page-hero { padding: 2rem 1rem 1rem; }
+      nav { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">r<span>EDI</span>.com</a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/jobs.html">Jobs</a>
+    <a href="/#pricing">Post a Job</a>
+    <a href="/#waitlist" class="nav-cta">Get Alerts</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <h1>Remote <em>EDI Jobs</em><br>Curated Daily</h1>
+  <p>Aggregated from LinkedIn, Indeed, Glassdoor and more. Updated every morning.</p>
+  <p class="updated">Last updated: <span>March 11, 2026</span> &nbsp;·&nbsp; <span>75</span> open positions</p>
+</div>
+
+<div class="filters">
+  <input type="text" class="search-box" id="searchBox" placeholder="Search title, company..." oninput="filterJobs()">
+  <select id="specFilter" onchange="filterJobs()">
+    <option value="">All Specializations</option>
+    <option value="EDI Analyst">EDI Analyst</option>
+<option value="EDI Coordinator">EDI Coordinator</option>
+<option value="EDI Developer">EDI Developer</option>
+<option value="EDI General">EDI General</option>
+<option value="Healthcare EDI">Healthcare EDI</option>
+<option value="Logistics & Retail">Logistics & Retail</option>
+<option value="SAP EDI">SAP EDI</option>
+  </select>
+  <select id="regionFilter" onchange="filterJobs()">
+    <option value="">All Regions</option>
+    <option value="Canada">Canada</option>
+<option value="Germany">Germany</option>
+<option value="Global">Global</option>
+<option value="India">India</option>
+<option value="Philippines">Philippines</option>
+<option value="Spain">Spain</option>
+<option value="UK">UK</option>
+<option value="USA">USA</option>
+  </select>
+  <div class="results-count" id="resultsCount"><span>75</span> jobs</div>
+</div>
+
+<div class="jobs-grid" id="jobsGrid">
+  
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="UK"
+             data-search="edi lead analyst essential recruitment edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Mar 11, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Lead Analyst</h3>
+          <div class="job-company">Essential Recruitment</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Manchester Science Park, Manchester, UK</span>
+            <span class="salary">$91,000 - $104,000</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.co.uk/jobs/details/5661227737?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="UK"
+             data-search="edi technical analyst - manchester essential recruitment edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Mar 11, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Technical Analyst - Manchester</h3>
+          <div class="job-company">Essential Recruitment</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Manchester Science Park, Manchester, UK</span>
+            <span class="salary">$91,000 - $104,000</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.co.uk/jobs/details/5661227387?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="Germany"
+             data-search="edi developer / integration engineer (m/w/d) – remote first duvenbeck unternehmensgruppe edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Mar 11, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Developer / Integration Engineer (m/w/d) – Remote First</h3>
+          <div class="job-company">Duvenbeck Unternehmensgruppe</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote Germany</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.de/details/5661313144?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="Germany"
+             data-search="edi specialist / application manager (m/w/d) hays working for your tomorrow edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Mar 11, 2026</span>
+          </div>
+          <h3 class="job-title">Edi Specialist / Application Manager (m/w/d)</h3>
+          <div class="job-company">Hays Working for your tomorrow</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Wildensorg, Bamberg, Germany</span>
+            <span class="salary">$50,000 - $70,000</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.de/details/5661247791?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="Germany"
+             data-search="edi developer (100% homeoffice) workidentity gmbh edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Mar 10, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Developer (100% Homeoffice)</h3>
+          <div class="job-company">workidentity GmbH</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Altona-Altstadt, Hamburg, Germany</span>
+            <span class="salary">$45,000 - $65,000</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.de/details/5660093526?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="USA"
+             data-search="edi specialist (m/w/d) apm personal-leasing gmbh - aschaffenburg edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Mar 10, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Specialist (m/w/d)</h3>
+          <div class="job-company">apm Personal-Leasing GmbH - Aschaffenburg</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Gelnhausen, Main-Kinzig-Kreis, Germany</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.de/details/5660082629?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="edi analyst i (b2b saas) prompt healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Mar 10, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Analyst I (B2B SaaS)</h3>
+          <div class="job-company">Prompt</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$60,000 - $70,000/yr</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Jobs</span>
+            <a href="https://jobs.ashbyhq.com/Prompt/418d8b13-63c4-46e8-b124-b3908c511937?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="remote edi project manager for healthcare claims eliassen group healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Mar 10, 2026</span>
+          </div>
+          <h3 class="job-title">Remote EDI Project Manager for Healthcare Claims</h3>
+          <div class="job-company">Eliassen Group</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Jooble</span>
+            <a href="https://jooble.org/jdp/313120348192177568?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="SAP EDI"
+             data-region="Canada"
+             data-search="sap otc & edi analyst — remote‑flexible whirlpool corporation sap edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#e1705520; color:#e17055; border-color:#e1705540">SAP EDI</span>
+            <span class="job-date">Mar 10, 2026</span>
+          </div>
+          <h3 class="job-title">SAP OTC & EDI Analyst — Remote‑Flexible</h3>
+          <div class="job-company">Whirlpool Corporation</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote CA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Recruit.net</span>
+            <a href="https://www.recruit.net/job/sap-otc-edi-analyst-remoteflexible-jobs/E8F679517008AED1?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="Global"
+             data-search="edi analyst ii mtm healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Mar 09, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Analyst II</h3>
+          <div class="job-company">MTM</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Built In</span>
+            <a href="https://builtin.com/job/edi-analyst-ii/7572824?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="SAP EDI"
+             data-region="USA"
+             data-search="senior sap sd edi specialist (100% remote) :; est-cst based candidate only dms vision inc sap edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#e1705520; color:#e17055; border-color:#e1705540">SAP EDI</span>
+            <span class="job-date">Mar 09, 2026</span>
+          </div>
+          <h3 class="job-title">Senior SAP SD EDI Specialist (100% Remote) :; EST-CST based Candidate Only</h3>
+          <div class="job-company">DMS Vision Inc</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5659664848?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="USA"
+             data-search="edi manager (milwaukee, wi) milwaukee tool edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Mar 08, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Manager (Milwaukee, WI)</h3>
+          <div class="job-company">Milwaukee Tool</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5659085104?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="USA"
+             data-search="staff quality assurance engineer-edi & integration milwaukee tool edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Mar 08, 2026</span>
+          </div>
+          <h3 class="job-title">Staff Quality Assurance Engineer-EDI & Integration</h3>
+          <div class="job-company">Milwaukee Tool</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5658582369?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="Canada"
+             data-search="information systems analyst- edi wajax edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Mar 08, 2026</span>
+          </div>
+          <h3 class="job-title">Information Systems Analyst- EDI</h3>
+          <div class="job-company">Wajax</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Lachine, Montréal, Canada</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.ca/details/5658744087?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="Spain"
+             data-search="senior edifecs developer taskium healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Mar 08, 2026</span>
+          </div>
+          <h3 class="job-title">Senior EDIFECS Developer</h3>
+          <div class="job-company">Taskium</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote ES</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Taskium.42web.io</span>
+            <a href="https://taskium.42web.io/job/senior-edifecs-developer?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="Germany"
+             data-search="edi specialist / application manager automation (m/w/d) hays ag edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Mar 06, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Specialist / Application Manager Automation (m/w/d)</h3>
+          <div class="job-company">Hays AG</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Bamberg (Kreis), Bayern, Germany</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.de/details/5655665116?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="remote revenue cycle edi systems analyst - home health humana inc healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Mar 05, 2026</span>
+          </div>
+          <h3 class="job-title">Remote Revenue Cycle EDI Systems Analyst - Home Health</h3>
+          <div class="job-company">Humana Inc</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Jooble</span>
+            <a href="https://jooble.org/jdp/-6152459010262786542?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="edi specialist the hilsinger company parent, llc healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Mar 05, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Specialist</h3>
+          <div class="job-company">The Hilsinger Company Parent, LLC</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Indeed</span>
+            <a href="https://www.indeed.com/viewjob?jk=a48b1699979d06f1&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Coordinator"
+             data-region="USA"
+             data-search="edi coordinator pam transport edi coordinator">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#fd79a820; color:#fd79a8; border-color:#fd79a840">EDI Coordinator</span>
+            <span class="job-date">Mar 04, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Coordinator</h3>
+          <div class="job-company">PAM Transport</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$60,000 - $80,000</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5653787869?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="SAP EDI"
+             data-region="Canada"
+             data-search="sap edi & integration technical lead riverside natural foods sap edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#e1705520; color:#e17055; border-color:#e1705540">SAP EDI</span>
+            <span class="job-date">Mar 04, 2026</span>
+          </div>
+          <h3 class="job-title">SAP EDI & Integration Technical Lead</h3>
+          <div class="job-company">Riverside Natural Foods</div>
+          <div class="job-meta">
+            <span class="job-location">📍 North York, Toronto, Canada</span>
+            <span class="salary">$110,000 - $125,000</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.ca/details/5653948578?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="SAP EDI"
+             data-region="Canada"
+             data-search="sap edi & integration technical lead riverside natural foods ltd. sap edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#e1705520; color:#e17055; border-color:#e1705540">SAP EDI</span>
+            <span class="job-date">Mar 04, 2026</span>
+          </div>
+          <h3 class="job-title">SAP EDI & Integration Technical Lead</h3>
+          <div class="job-company">Riverside Natural Foods Ltd.</div>
+          <div class="job-meta">
+            <span class="job-location">📍 North York, Toronto, Canada</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.ca/details/5653438834?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="SAP EDI"
+             data-region="Global"
+             data-search="boomi developer+ edi yochana sap edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#e1705520; color:#e17055; border-color:#e1705540">SAP EDI</span>
+            <span class="job-date">Mar 04, 2026</span>
+          </div>
+          <h3 class="job-title">Boomi developer+ EDI</h3>
+          <div class="job-company">Yochana</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Lensa</span>
+            <a href="https://lensa.com/job-v1/yochana/remote/edi-developer/4f38dc51618f8ae3cb046e8bc37be141?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="Philippines"
+             data-search="edi developer q2 hr solutions edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Mar 04, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Developer</h3>
+          <div class="job-company">Q2 HR Solutions</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote PH</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Jobgether</span>
+            <a href="https://jobgether.com/offer/69a809fe7f0cfae7f12910b9-edi-developer?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="Philippines"
+             data-search="electronic data interchange developer q2 hr solutions edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Mar 04, 2026</span>
+          </div>
+          <h3 class="job-title">Electronic Data Interchange Developer</h3>
+          <div class="job-company">Q2 HR Solutions</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote PH</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">LinkedIn</span>
+            <a href="https://ph.linkedin.com/jobs/view/electronic-data-interchange-developer-at-q2-hr-solutions-4380789150?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="Global"
+             data-search="electronic data interchange (edi) analyst – your remote us home office i penumbra healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Mar 03, 2026</span>
+          </div>
+          <h3 class="job-title">Electronic Data Interchange (EDI) Analyst – Your Remote US Home Office I</h3>
+          <div class="job-company">Penumbra</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            <span class="salary">$100,000 - $142,000/yr</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Up2staff</span>
+            <a href="https://up2staff.com/your-data-interchange-edi-analyst-electronic-at-penumbra?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Logistics & Retail"
+             data-region="USA"
+             data-search="[remote] edi functional analyst - oracle (usc /gc) raas infotek logistics & retail">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#fdcb6e20; color:#fdcb6e; border-color:#fdcb6e40">Logistics & Retail</span>
+            <span class="job-date">Mar 03, 2026</span>
+          </div>
+          <h3 class="job-title">[Remote] EDI Functional Analyst - Oracle (USC /GC)</h3>
+          <div class="job-company">Raas Infotek</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Jobright</span>
+            <a href="https://jobright.ai/jobs/info/69a75adc2672cb0acb4bcd77?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Logistics & Retail"
+             data-region="USA"
+             data-search="[remote] edi integration specialist - contract feastables logistics & retail">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#fdcb6e20; color:#fdcb6e; border-color:#fdcb6e40">Logistics & Retail</span>
+            <span class="job-date">Mar 03, 2026</span>
+          </div>
+          <h3 class="job-title">[Remote] EDI Integration Specialist - Contract</h3>
+          <div class="job-company">Feastables</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Jobright</span>
+            <a href="https://jobright.ai/jobs/info/69803da6abff4c399a9f02bd?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="SAP EDI"
+             data-region="Global"
+             data-search="edi administrators pyramid consulting, inc sap edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#e1705520; color:#e17055; border-color:#e1705540">SAP EDI</span>
+            <span class="job-date">Mar 03, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Administrators</h3>
+          <div class="job-company">Pyramid Consulting, Inc</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Tallo</span>
+            <a href="https://tallo.com/talent/job/technology/computer-systems-engineer-or-architect/remote/edi-administrator-88cfed27?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="USA"
+             data-search="edi implementation specialist i adp edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Mar 02, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Implementation Specialist I</h3>
+          <div class="job-company">ADP</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Teal</span>
+            <a href="https://www.tealhq.com/job/edi-implementation-specialist-i_7ea1a082b4078a10358fee7bcd667eda24797?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="encounters business analyst iv sql edi centene corporation healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Mar 02, 2026</span>
+          </div>
+          <h3 class="job-title">Encounters Business Analyst IV SQL EDI</h3>
+          <div class="job-company">Centene Corporation</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Centene Careers - Centene Corporation</span>
+            <a href="https://jobs.centene.com/us/en/jobs/1627752/encounters-business-analyst-iv-sql-edi/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Logistics & Retail"
+             data-region="USA"
+             data-search="accounts payable analyst - edi factory motor parts careers logistics & retail">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#fdcb6e20; color:#fdcb6e; border-color:#fdcb6e40">Logistics & Retail</span>
+            <span class="job-date">Mar 01, 2026</span>
+          </div>
+          <h3 class="job-title">Accounts Payable Analyst - EDI</h3>
+          <div class="job-company">Factory Motor Parts Careers</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5650353678?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI General"
+             data-region="UK"
+             data-search="senior associate, edi - london stock exchange group london stock exchange group edi general">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#636e7220; color:#636e72; border-color:#636e7240">EDI General</span>
+            <span class="job-date">Mar 01, 2026</span>
+          </div>
+          <h3 class="job-title">Senior Associate, EDI - London Stock Exchange Group</h3>
+          <div class="job-company">London Stock Exchange Group</div>
+          <div class="job-meta">
+            <span class="job-location">📍 London, UK, UK</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.co.uk/jobs/land/ad/5649383452?se=sjFsIi0d8RGOQ-dO_WWfdw&utm_medium=api&utm_source=03049e54&v=183A35402BAC08932082824D12045F334D1115F3" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="Germany"
+             data-search="senior it & digital process specialist wms & edi (w/m/d) lgi edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Mar 01, 2026</span>
+          </div>
+          <h3 class="job-title">Senior IT & Digital Process Specialist WMS & EDI (w/m/d)</h3>
+          <div class="job-company">LGI</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Deutschland, Germany</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.de/details/5650487742?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="USA"
+             data-search="senior edi engineer impact b2b thorndale partners edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Mar 01, 2026</span>
+          </div>
+          <h3 class="job-title">Senior EDI Engineer Impact B2B</h3>
+          <div class="job-company">Thorndale Partners</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$60,000 - $80,000/yr</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Learn4Good</span>
+            <a href="https://www.learn4good.com/jobs/online_remote/info_technology/4908697493/e/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Logistics & Retail"
+             data-region="Global"
+             data-search="edi developer-remote georgia it, inc. logistics & retail">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#fdcb6e20; color:#fdcb6e; border-color:#fdcb6e40">Logistics & Retail</span>
+            <span class="job-date">Mar 01, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Developer-Remote</h3>
+          <div class="job-company">Georgia IT, Inc.</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Jobgether</span>
+            <a href="https://jobgether.com/offer/69a4073d7f0cfae7f1233ac3-edi-developer-remote?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI General"
+             data-region="UK"
+             data-search="senior associate, edi london stock exchange group edi general">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#636e7220; color:#636e72; border-color:#636e7240">EDI General</span>
+            <span class="job-date">Feb 28, 2026</span>
+          </div>
+          <h3 class="job-title">Senior Associate, EDI</h3>
+          <div class="job-company">London Stock Exchange Group</div>
+          <div class="job-meta">
+            <span class="job-location">📍 London, UK, UK</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.co.uk/jobs/details/5648687022?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="remote c# & sql healthcare edi developer quantix healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 28, 2026</span>
+          </div>
+          <h3 class="job-title">Remote C# & SQL Healthcare EDI Developer</h3>
+          <div class="job-company">Quantix</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$60,000 - $80,000/yr</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Learn4Good</span>
+            <a href="https://www.learn4good.com/jobs/online_remote/software_development/4904425412/e/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="SAP EDI"
+             data-region="USA"
+             data-search="remote edi oracle analyst; edifact, x12, idoc inherent technologies sap edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#e1705520; color:#e17055; border-color:#e1705540">SAP EDI</span>
+            <span class="job-date">Feb 28, 2026</span>
+          </div>
+          <h3 class="job-title">Remote EDI Oracle Analyst; EDIFACT, X12, IDOC</h3>
+          <div class="job-company">Inherent Technologies</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$80,000 - $100,000/yr</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Learn4Good</span>
+            <a href="https://www.learn4good.com/jobs/online_remote/info_technology/4903735968/e/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="edifecs/edi tech lead caresource management services healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 26, 2026</span>
+          </div>
+          <h3 class="job-title">Edifecs/EDI Tech Lead</h3>
+          <div class="job-company">CareSource Management Services</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$94,100 - $164,800</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5646737098?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="Global"
+             data-search="billing edi analyst (hippa: 837and/or 270/271 experience required) labcorp healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 25, 2026</span>
+          </div>
+          <h3 class="job-title">Billing EDI Analyst (HIPPA: 837and/or 270/271 experience required)</h3>
+          <div class="job-company">labcorp</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            <span class="salary">$45,000 - $65,000/yr</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Working Nomads</span>
+            <a href="https://www.workingnomads.com/jobs/billing-edi-analyst-hippa-837andor-270271-experience-required-labcorp?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Logistics & Retail"
+             data-region="USA"
+             data-search="project manager edi molina healthcare, inc. logistics & retail">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#fdcb6e20; color:#fdcb6e; border-color:#fdcb6e40">Logistics & Retail</span>
+            <span class="job-date">Feb 24, 2026</span>
+          </div>
+          <h3 class="job-title">Project Manager EDI</h3>
+          <div class="job-company">Molina Healthcare, Inc.</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Virtual Vocations</span>
+            <a href="https://www.virtualvocations.com/job/project-manager-edi-2926651-i.html?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="USA"
+             data-search="senior edi developer conduent edi solutions, inc. edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Feb 23, 2026</span>
+          </div>
+          <h3 class="job-title">Senior EDI Developer</h3>
+          <div class="job-company">Conduent EDI Solutions, Inc.</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5642651816?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="USA"
+             data-search="senior edifecs developer conduent edi solutions, inc. edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Feb 23, 2026</span>
+          </div>
+          <h3 class="job-title">Senior EDIFECS Developer</h3>
+          <div class="job-company">Conduent EDI Solutions, Inc.</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5642651809?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Logistics & Retail"
+             data-region="USA"
+             data-search="[remote] electronic data interchange consultant netpace inc logistics & retail">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#fdcb6e20; color:#fdcb6e; border-color:#fdcb6e40">Logistics & Retail</span>
+            <span class="job-date">Feb 23, 2026</span>
+          </div>
+          <h3 class="job-title">[Remote] Electronic Data Interchange Consultant</h3>
+          <div class="job-company">Netpace Inc</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$65 - $75/hr</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Jobright</span>
+            <a href="https://jobright.ai/jobs/info/698e22bd0f6f7e7a2cea3031?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="India"
+             data-search="edi support analyst 5100 kyndryl solutions private limited edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Feb 23, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Support Analyst</h3>
+          <div class="job-company">5100 Kyndryl Solutions Private Limited</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote IN</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Workday</span>
+            <a href="https://kyndryl.wd5.myworkdayjobs.com/kyndrylprofessionalcareers/job/Bangalore-Karnataka-India/EDI-Support-Analyst_R-57153?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="USA"
+             data-search="edi & process improvement specialist emc insurance companies edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Feb 22, 2026</span>
+          </div>
+          <h3 class="job-title">EDI & Process Improvement Specialist</h3>
+          <div class="job-company">EMC Insurance Companies</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$78,726 - $108,771</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5641863110?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="SAP EDI"
+             data-region="Global"
+             data-search="edi functional analyst - oracle e-solutions sap edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#e1705520; color:#e17055; border-color:#e1705540">SAP EDI</span>
+            <span class="job-date">Feb 21, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Functional Analyst - Oracle</h3>
+          <div class="job-company">E-Solutions</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Lensa</span>
+            <a href="https://lensa.com/job-v1/e-solutions/remote/edi-business-analyst/60e8eb250ffcb65745a955e31bd00e4d?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="UK"
+             data-search="senior edi technical analyst (ftc maternity cover) skechers edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Feb 20, 2026</span>
+          </div>
+          <h3 class="job-title">Senior EDI Technical Analyst (FTC Maternity Cover)</h3>
+          <div class="job-company">Skechers</div>
+          <div class="job-meta">
+            <span class="job-location">📍 UK, UK</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.co.uk/jobs/details/5638165572?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="manager of edi solutions mtm health healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 20, 2026</span>
+          </div>
+          <h3 class="job-title">Manager of EDI Solutions</h3>
+          <div class="job-company">MTM Health</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Virtual Vocations</span>
+            <a href="https://www.virtualvocations.com/job/manager-of-edi-solutions-2923083-i.html?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="Global"
+             data-search="edi developers community health center network inc healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 19, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Developers</h3>
+          <div class="job-company">Community Health Center Network Inc</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Tallo</span>
+            <a href="https://tallo.com/talent/job/technology/software-developer-or-engineer/remote/edi-developer-45755639?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="senior edi software engineer {apis with c# .net} mda edge healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 19, 2026</span>
+          </div>
+          <h3 class="job-title">Senior EDI Software Engineer {APIs with C# .NET}</h3>
+          <div class="job-company">MDA Edge</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$112,000 - $140,000/yr</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Jobgether</span>
+            <a href="https://jobgether.com/offer/6996bc29da7696de2f5723f8-senior-edi-software-engineer-apis-with-c-.net?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="Global"
+             data-search="edi specialists beacon hill staffing group, llc healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 19, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Specialists</h3>
+          <div class="job-company">Beacon Hill Staffing Group, LLC</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Tallo</span>
+            <a href="https://tallo.com/talent/job/manufacturing/quality-inspector-or-technician/remote/edi-specialist-da7f4086?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="SAP EDI"
+             data-region="USA"
+             data-search="seeburger edi / mft bislink specialist in india upwork sap edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#e1705520; color:#e17055; border-color:#e1705540">SAP EDI</span>
+            <span class="job-date">Feb 19, 2026</span>
+          </div>
+          <h3 class="job-title">Seeburger EDI / MFT BISLink Specialist in India</h3>
+          <div class="job-company">Upwork</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Upwork</span>
+            <a href="https://www.upwork.com/freelance-jobs/apply/Seeburger-EDI-MFT-BISLink-Specialist-India_~022024487699119179482/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="USA"
+             data-search="edi analyst - axway b2bi signature consultants edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Feb 17, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Analyst - Axway B2Bi</h3>
+          <div class="job-company">Signature Consultants</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5633867586?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="Global"
+             data-search="urgent opening - edifecs developer - remote infinite computer solutions (ics) healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 17, 2026</span>
+          </div>
+          <h3 class="job-title">Urgent Opening - EDIFECS Developer - Remote</h3>
+          <div class="job-company">Infinite Computer Solutions (ICS)</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Dice</span>
+            <a href="https://www.dice.com/job-detail/74b53fd5-b083-4c45-84d6-1f54cd2879b5?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="USA"
+             data-search="[remote] electronic data interchange specialist (edi) mcleod software edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Feb 16, 2026</span>
+          </div>
+          <h3 class="job-title">[Remote] Electronic Data Interchange Specialist (EDI)</h3>
+          <div class="job-company">McLeod Software</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Jobright</span>
+            <a href="https://jobright.ai/jobs/info/69939c1381476f6176ab301e?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="Global"
+             data-search="[hiring] edi analyst @zotec partners zotec partners healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 13, 2026</span>
+          </div>
+          <h3 class="job-title">[Hiring] EDI Analyst @Zotec Partners</h3>
+          <div class="job-company">Zotec Partners</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Remotive</span>
+            <a href="https://remotive.com/remote/jobs/all-others/edi-analyst-3658721?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="Global"
+             data-search="edi coordinator, excel analyst hr tech solutions healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 13, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Coordinator, Excel Analyst</h3>
+          <div class="job-company">HR Tech Solutions</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Remote Rocketship</span>
+            <a href="https://www.remoterocketship.com/us/company/hrtechsolutions-info/jobs/edi-coordinator-excel-analyst-united-states-remote/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="home healthcare revenue cycle edi systems analyst centerwell healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 12, 2026</span>
+          </div>
+          <h3 class="job-title">Home Healthcare Revenue Cycle EDI Systems Analyst</h3>
+          <div class="job-company">CenterWell</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$60,800 - $82,900</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5626806628?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="USA"
+             data-search="system specialist, edi huhtamaki, inc. edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Feb 12, 2026</span>
+          </div>
+          <h3 class="job-title">System Specialist, EDI</h3>
+          <div class="job-company">Huhtamaki, Inc.</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Workday</span>
+            <a href="https://huhtamaki.wd103.myworkdayjobs.com/en-US/DirectsExternal/job/System-Specialist--EDI_R044184-2?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="edi functional analyst apexon healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 12, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Functional Analyst</h3>
+          <div class="job-company">Apexon</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Indeed</span>
+            <a href="https://www.indeed.com/m/viewjob?jk=784e7523c79a3ef8&from=serp&tk=1jjc8of4lg2mn8al&xkcb=SoBA67M3msZuMWSmJJ0bbzkdCdPP&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Logistics & Retail"
+             data-region="USA"
+             data-search="edi specialist fancy panz logistics & retail">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#fdcb6e20; color:#fdcb6e; border-color:#fdcb6e40">Logistics & Retail</span>
+            <span class="job-date">Feb 09, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Specialist</h3>
+          <div class="job-company">Fancy Panz</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$45 - $75/hr</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Indeed</span>
+            <a href="https://www.indeed.com/viewjob?jk=8ca14098d671d446&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="edi analyst iii skygen healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Feb 06, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Analyst III</h3>
+          <div class="job-company">SKYGEN</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$90,334 - $135,501</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5618153106?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="USA"
+             data-search="senior edi integration analyst (work from home) transamerica edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Feb 05, 2026</span>
+          </div>
+          <h3 class="job-title">Senior EDI Integration Analyst (Work from Home)</h3>
+          <div class="job-company">Transamerica</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$85,000 - $99,000</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5615769331?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="USA"
+             data-search="it business analyst edi (onsite) threshold enterprises edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Feb 04, 2026</span>
+          </div>
+          <h3 class="job-title">IT Business Analyst EDI (Onsite)</h3>
+          <div class="job-company">Threshold Enterprises</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$74,000 - $87,000</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5614763934?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="USA"
+             data-search="edi consultant h r pundits inc edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Feb 02, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Consultant</h3>
+          <div class="job-company">H R PUNDITS INC</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Renton, King County, USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5611047944?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="systems analyst - edi (remote) vaya health healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Jan 31, 2026</span>
+          </div>
+          <h3 class="job-title">Systems Analyst - EDI (Remote)</h3>
+          <div class="job-company">Vaya Health</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$79,354 - $103,160</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5607894299?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="USA"
+             data-search="edi application development manager - remote paradigm edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Jan 30, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Application Development Manager - remote</h3>
+          <div class="job-company">Paradigm</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5606270080?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI General"
+             data-region="USA"
+             data-search="oracle ebs edi techno-functional consultant diverse lynx llc edi general">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#636e7220; color:#636e72; border-color:#636e7240">EDI General</span>
+            <span class="job-date">Jan 20, 2026</span>
+          </div>
+          <h3 class="job-title">Oracle EBS EDI Techno-Functional Consultant</h3>
+          <div class="job-company">DIVERSE LYNX LLC</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$131,040 - $147,680</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5593307648?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="USA"
+             data-search="edi analyst sol de janeiro edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Jan 11, 2026</span>
+          </div>
+          <h3 class="job-title">EDI Analyst</h3>
+          <div class="job-company">Sol de Janeiro</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$100,000 - $125,000</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5579383572?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="Healthcare EDI"
+             data-region="USA"
+             data-search="business analyst, healthcare edi essen medical associates healthcare edi">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#00b89420; color:#00b894; border-color:#00b89440">Healthcare EDI</span>
+            <span class="job-date">Jan 01, 2026</span>
+          </div>
+          <h3 class="job-title">Business Analyst, Healthcare EDI</h3>
+          <div class="job-company">Essen Medical Associates</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            <span class="salary">$93,600 - $114,400</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5563254672?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="UK"
+             data-search="edi engineer deckers edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Dec 06, 2025</span>
+          </div>
+          <h3 class="job-title">EDI Engineer</h3>
+          <div class="job-company">Deckers</div>
+          <div class="job-meta">
+            <span class="job-location">📍 London, UK, UK</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.co.uk/jobs/details/5531014179?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="USA"
+             data-search="edi support analyst msc mediterranean shipping company sa edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Nov 22, 2025</span>
+          </div>
+          <h3 class="job-title">EDI Support Analyst</h3>
+          <div class="job-company">MSC Mediterranean Shipping Company SA</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Remote USA</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.com/details/5509915341?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Analyst"
+             data-region="Canada"
+             data-search="edi business analyst lbmx edi analyst">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#6c5ce720; color:#6c5ce7; border-color:#6c5ce740">EDI Analyst</span>
+            <span class="job-date">Oct 25, 2025</span>
+          </div>
+          <h3 class="job-title">EDI Business Analyst</h3>
+          <div class="job-company">LBMX</div>
+          <div class="job-meta">
+            <span class="job-location">📍 London, Middlesex, Canada</span>
+            <span class="salary">$60,000 - $70,000</span>
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.ca/details/5463877107?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+        <div class="job-card"
+             data-spec="EDI Developer"
+             data-region="USA"
+             data-search="edi developer (m/w/d) hans geis + co kg edi developer">
+          <div class="card-header">
+            <span class="spec-tag" style="background:#0984e320; color:#0984e3; border-color:#0984e340">EDI Developer</span>
+            <span class="job-date">Aug 06, 2025</span>
+          </div>
+          <h3 class="job-title">EDI Developer (m/w/d)</h3>
+          <div class="job-company">Hans Geis + Co KG</div>
+          <div class="job-meta">
+            <span class="job-location">📍 Bad Neustadt an der Saale, Rhön-Grabfeld (Kreis), Germany</span>
+            
+          </div>
+          <div class="card-footer">
+            <span class="job-source">Adzuna</span>
+            <a href="https://www.adzuna.de/details/5340553998?utm_medium=api&utm_source=03049e54" target="_blank" rel="noopener" class="apply-btn">Apply →</a>
+          </div>
+        </div>
+  <div class="empty-state" id="emptyState" style="display:none">
+    <h3>No jobs found</h3>
+    <p>Try adjusting your filters or search term.</p>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 RemoteEDI.com &nbsp;·&nbsp; <a href="mailto:hire@remoteedi.com">hire@remoteedi.com</a> &nbsp;·&nbsp; <a href="/#pricing">Post a Job — $199</a></p>
+</footer>
+
+<script>
+  function filterJobs() {
+    const search  = document.getElementById('searchBox').value.toLowerCase();
+    const spec    = document.getElementById('specFilter').value;
+    const region  = document.getElementById('regionFilter').value;
+
+    const cards = document.querySelectorAll('.job-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      const matchSearch = !search || card.dataset.search.includes(search);
+      const matchSpec   = !spec   || card.dataset.spec === spec;
+      const matchRegion = !region || card.dataset.region === region;
+
+      if (matchSearch && matchSpec && matchRegion) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    document.getElementById('resultsCount').innerHTML = `<span>${visible}</span> jobs`;
+    document.getElementById('emptyState').style.display = visible === 0 ? 'block' : 'none';
+  }
+</script>
+
+</body>
+</html>
