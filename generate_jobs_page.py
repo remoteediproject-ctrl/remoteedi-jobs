@@ -420,12 +420,12 @@ def generate_html(jobs: list) -> str:
 <body>
 
 <nav>
-  <a href="/" class="nav-logo">r<span>EDI</span>.com</a>
+  <a href="/" class="nav-logo">RemoteEDI.com</a>
   <div class="nav-links">
     <a href="/">Home</a>
     <a href="/jobs.html">Jobs</a>
-    <a href="/#pricing">Post a Job</a>
-    <a href="/#waitlist" class="nav-cta">Get Alerts</a>
+    <a href="/employers.html">For Employers</a>
+    <a href="/#alerts" class="nav-cta">Get Alerts</a>
   </div>
 </nav>
 
@@ -457,7 +457,7 @@ def generate_html(jobs: list) -> str:
 </div>
 
 <footer>
-  <p>© 2026 RemoteEDI.com &nbsp;·&nbsp; <a href="mailto:hire@remoteedi.com">hire@remoteedi.com</a> &nbsp;·&nbsp; <a href="/#pricing">Post a Job — $199</a></p>
+  <p>© 2026 RemoteEDI.com &nbsp;·&nbsp; <a href="mailto:hire@remoteedi.com">hire@remoteedi.com</a> &nbsp;·&nbsp; <a href="/employers.html">For Employers</a></p>
 </footer>
 
 <script>
