@@ -1,0 +1,13 @@
+{
+  "id": "senior-edi-analyst-acme-corp-2026",
+  "title": "Senior EDI Analyst",
+  "company": "Acme Corp",
+  "location": "Remote USA",
+  "salary": "$90,000 – $120,000/yr",
+  "type": "Full-time",
+  "specialization": "Healthcare EDI",
+  "apply_url": "",
+  "contact_email": "recruiter@acme.com",
+  "posted": "2026-03-13",
+  "description": "We are looking for a Senior EDI Analyst to join our growing healthcare IT team. This is a fully remote position open to candidates in the United States.\n\nAbout the role:\nYou will be responsible for managing EDI integrations with our healthcare trading partners, ensuring accurate and timely exchange of HIPAA transactions.\n\nResponsibilities:\n- Develop and maintain EDI mappings for 837, 835, 834 and 270/271 transactions\n- Onboard new trading partners and payers\n- Troubleshoot transmission failures and data discrepancies\n- Work with internal teams to translate business requirements into EDI specs\n- Document EDI workflows and maintain trading partner profiles\n\nRequirements:\n- 3+ years of EDI experience in a healthcare environment\n- Strong knowledge of X12 HIPAA transaction sets (837P, 837I, 835, 834)\n- Experience with AS2, SFTP and VAN transmission protocols\n- Familiarity with EDI translation software (Gentran, Sterling, or similar)\n- Ability to read and interpret raw EDI files\n\nNice to have:\n- Experience with HL7 or FHIR\n- Knowledge of clearinghouse relationships (Availity, Change Healthcare)\n- SQL skills for data validation\n\nWhat we offer:\n- 100% remote, US-based team\n- Competitive salary $90,000 – $120,000 depending on experience\n- Health, dental and vision insurance\n- 401(k) with 4% match\n- Home office stipend"
+}

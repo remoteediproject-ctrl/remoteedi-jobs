@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a Job — RemoteEDI.com</title>
+  <meta name="description" content="Reach 500+ remote EDI professionals. Post your EDI job for $199 — listed for 30 days.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0b0f0e;
+      --bg2:     #111614;
+      --bg3:     #181e1c;
+      --accent:  #00e5a0;
+      --accent2: #00b87a;
+      --text:    #e8ede9;
+      --muted:   #7a8c82;
+      --border:  #1e2926;
+      --radius:  10px;
+      --error:   #e17055;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      background: var(--bg);
+    }
+    .nav-logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── LAYOUT ── */
+    .page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    /* ── FORM SIDE ── */
+    .form-side h1 {
+      font-size: clamp(1.6rem, 3vw, 2rem);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .form-side h1 em {
+      color: var(--accent);
+      font-style: normal;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .form-side > p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    /* ── FORM ── */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      font-family: 'IBM Plex Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    label .required { color: var(--accent); margin-left: 2px; }
+    label .optional { color: var(--border); font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent);
+      background: var(--bg3);
+    }
+    input::placeholder, textarea::placeholder { color: var(--border); }
+    textarea { resize: vertical; min-height: 140px; line-height: 1.6; }
+
+    .input-hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+      line-height: 1.4;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    /* ── DIVIDER ── */
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 2rem 0 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── SUBMIT ── */
+    .submit-area {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .submit-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    .submit-note strong { color: var(--accent); }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0.9rem 2rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .btn-submit:hover { background: var(--accent2); }
+    .btn-submit:active { transform: scale(0.99); }
+    .btn-submit:disabled {
+      background: var(--border);
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+
+    /* ── ERROR ── */
+    .field-error {
+      font-size: 0.75rem;
+      color: var(--error);
+      margin-top: 0.35rem;
+      display: none;
+    }
+    .has-error input,
+    .has-error textarea,
+    .has-error select {
+      border-color: var(--error);
+    }
+    .has-error .field-error { display: block; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { position: sticky; top: 2rem; }
+
+    .price-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .price-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .price-period {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-list { list-style: none; }
+    .feature-list li {
+      font-size: 0.85rem;
+      color: var(--muted);
+      padding: 0.45rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      line-height: 1.4;
+    }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list li::before {
+      content: '✓';
+      color: var(--accent);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .info-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-top: 1rem;
+    }
+    .info-card h4 {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .info-card p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .info-card a { color: var(--accent); text-decoration: none; }
+
+    /* ── SUCCESS STATE ── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    .success-screen.visible { display: block; }
+    .success-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .success-screen h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .success-screen p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      max-width: 500px;
+      margin: 0 auto 1.5rem;
+    }
+    .success-screen a {
+      display: inline-block;
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace;
+      padding: 0.75rem 2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    /* Honeypot — hidden from humans, bots fill it */
+    .hp-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; tab-index: -1; }
+
+    /* Honeypot */
+    .hp-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; height: 0; overflow: hidden; }
+
+    @media (max-width: 768px) {
+      .page {
+        grid-template-columns: 1fr;
+        padding: 2rem 1rem 4rem;
+        gap: 2rem;
+      }
+      .sidebar { position: static; }
+      .form-row { grid-template-columns: 1fr; }
+      nav { padding: 0 1rem; }
+    }
+  </style>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">RemoteEDI.com</a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/jobs.html">Jobs</a>
+  </div>
+</nav>
+
+<div class="page" id="mainPage">
+
+  <!-- FORM SIDE -->
+  <div class="form-side">
+    <h1>Post a <em>Remote EDI Job</em></h1>
+    <p>Reach EDI professionals actively looking for remote work — analysts, developers, specialists, and coordinators across Healthcare, SAP, Logistics and more.</p>
+
+    <form id="jobForm" novalidate>
+
+      <div class="section-label">Job details</div>
+
+      <div class="form-group" id="group-title">
+        <label for="title">Job title <span class="required">*</span></label>
+        <input type="text" id="title" name="title" placeholder="e.g. Senior EDI Analyst" autocomplete="off">
+        <div class="field-error">Please enter a job title.</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" id="group-company">
+          <label for="company">Company name <span class="required">*</span></label>
+          <input type="text" id="company" name="company" placeholder="e.g. Acme Corp">
+          <div class="field-error">Required.</div>
+        </div>
+        <div class="form-group" id="group-location">
+          <label for="location">Location <span class="required">*</span></label>
+          <input type="text" id="location" name="location" placeholder="e.g. Remote USA">
+          <div class="field-error">Required.</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="salary">Salary range <span class="optional">(recommended)</span></label>
+          <input type="text" id="salary" name="salary" placeholder="e.g. $80,000 – $110,000/yr">
+          <div class="input-hint">Jobs with salary get 2× more clicks.</div>
+        </div>
+        <div class="form-group" id="group-type">
+          <label for="type">Employment type <span class="required">*</span></label>
+          <select id="type" name="type">
+            <option value="">Select...</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Contract">Contract</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Freelance">Freelance</option>
+          </select>
+          <div class="field-error">Required.</div>
+        </div>
+      </div>
+
+      <div class="form-group" id="group-description">
+        <label for="description">Job description <span class="required">*</span></label>
+        <textarea id="description" name="description" placeholder="Describe the role, responsibilities, required EDI skills (X12, EDIFACT, specific TPs), experience level..."></textarea>
+        <div class="input-hint">Minimum 100 characters. Be specific about EDI standards and tools required.</div>
+        <div class="field-error">Please add a job description (min. 100 characters).</div>
+      </div>
+
+      <div class="form-group" id="group-applyUrl">
+        <label for="applyUrl">Application URL <span class="optional">(optional)</span></label>
+        <input type="url" id="applyUrl" name="applyUrl" placeholder="https://yourcompany.com/careers/... (leave blank if none)">
+        <div class="input-hint">Link to your ATS, LinkedIn, or email. Leave blank — candidates will apply directly on RemoteEDI.com.</div>
+        <div class="field-error">Please enter a valid URL (starting with https://).</div>
+      </div>
+
+      <div class="section-label">Your contact</div>
+
+      <div class="form-group" id="group-email">
+        <label for="email">Contact email <span class="required">*</span></label>
+        <input type="email" id="email" name="email" placeholder="you@company.com">
+        <div class="input-hint">We'll send confirmation and invoice details here.</div>
+        <div class="field-error">Please enter a valid email address.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="invoice">Invoice details <span class="optional">(optional)</span></label>
+        <textarea id="invoice" name="invoice" style="min-height:80px"
+                  placeholder="Company name, VAT/NIP number, billing address — if you need a VAT invoice"></textarea>
+      </div>
+
+      <div class="submit-area">
+        <p class="submit-note">
+          After submitting you'll be redirected to our secure payment page.
+          Your job goes live within <strong>24 hours</strong> of payment confirmation.
+          Listed for <strong>30 days</strong>.
+        </p>
+        <!-- Honeypot -->
+        <div class="hp-field" aria-hidden="true">
+          <label for="hp_website">Website</label>
+          <input type="text" id="hp_website" name="hp_website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <!-- Turnstile -->
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAACqSvyEQrkoA9wKx" data-theme="dark" style="margin-bottom:1rem"></div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          Continue to Payment — $199 →
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="price-card">
+      <div class="price-tag">$199</div>
+      <div class="price-period">one-time · 30 days listing</div>
+      <ul class="feature-list">
+        <li>Listed on RemoteEDI.com for 30 days</li>
+        <li>Featured in our email digest to all subscribers</li>
+        <li>Highlighted as "Featured" in job listings</li>
+        <li>Included in specialization filters (Healthcare, SAP, Logistics...)</li>
+        <li>Direct apply link — candidates go straight to you</li>
+        <li>VAT invoice available on request</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h4>Questions?</h4>
+      <p>Email us at <a href="/cdn-cgi/l/email-protection#1f77766d7a5f6d7a72706b7a7a7b76317c7072"><span class="__cf_email__" data-cfemail="345c5d4651744651595b405151505d1a575b59">[email&#160;protected]</span></a> — we typically reply within a few hours.</p>
+    </div>
+
+    <div class="info-card">
+      <h4>Who's on our list?</h4>
+      <p>EDI analysts, developers, and specialists with experience in X12, EDIFACT, SAP IDocs, healthcare 837/835, and supply chain EDI. All actively seeking remote roles.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">✓</div>
+  <h2>Job details received!</h2>
+  <p>
+    You're being redirected to our secure payment page.
+    If the redirect doesn't happen automatically,
+    <a href="https://buy.stripe.com/fZuaER2CH5OqaoL3hs0Ny00" style="color:var(--accent);background:none;padding:0;font-family:inherit;font-weight:600">click here to pay →</a>
+  </p>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const STRIPE_LINK = 'https://buy.stripe.com/fZuaER2CH5OqaoL3hs0Ny00';
+  const NOTIFY_URL  = 'https://formspree.io/f/mdawzlya';
+
+  const FIELDS = [
+    { id: 'title',       check: function(v) { return v.trim().length > 2; } },
+    { id: 'company',     check: function(v) { return v.trim().length > 1; } },
+    { id: 'location',    check: function(v) { return v.trim().length > 1; } },
+    { id: 'type',        check: function(v) { return v !== ''; } },
+    { id: 'description', check: function(v) { return v.trim().length >= 100; } },
+    { id: 'applyUrl',    check: function(v) { return v.trim() === '' || v.trim().startsWith('http'); } },
+    { id: 'email',       check: function(v) { return v.includes('@') && v.includes('.'); } },
+  ];
+
+  function validateField(f) {
+    var el  = document.getElementById(f.id);
+    var grp = document.getElementById('group-' + f.id);
+    if (!grp || !el) return true;
+    var ok = f.check(el.value);
+    if (ok) { grp.classList.remove('has-error'); }
+    else     { grp.classList.add('has-error'); }
+    return ok;
+  }
+
+  function validateAll() {
+    var valid = true;
+    var firstBad = null;
+    FIELDS.forEach(function(f) {
+      var ok = validateField(f);
+      if (!ok && !firstBad) { firstBad = document.getElementById(f.id); }
+      if (!ok) valid = false;
+    });
+    if (firstBad) { firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    return valid;
+  }
+
+  FIELDS.forEach(function(f) {
+    var el = document.getElementById(f.id);
+    if (!el) return;
+    el.addEventListener('blur', function() {
+      this.dataset.touched = '1';
+      validateField(f);
+    });
+    el.addEventListener('input', function() {
+      if (this.dataset.touched) { validateField(f); }
+    });
+  });
+
+  document.getElementById('jobForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!validateAll()) return;
+
+    // Honeypot check — bots fill hidden fields, humans don't
+    if (document.getElementById('hp_website').value !== '') {
+      return;
+    }
+
+    // Turnstile token check
+    var turnstileInput = document.querySelector('input[name="cf-turnstile-response"]');
+    var turnstileToken = turnstileInput ? turnstileInput.value : '';
+    if (!turnstileToken) {
+      alert('Security check not complete. Please wait a moment and try again.');
+      return;
+    }
+
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    var data = {
+      title:       document.getElementById('title').value.trim(),
+      company:     document.getElementById('company').value.trim(),
+      location:    document.getElementById('location').value.trim(),
+      salary:      document.getElementById('salary').value.trim(),
+      type:        document.getElementById('type').value,
+      description: document.getElementById('description').value.trim(),
+      applyUrl:    document.getElementById('applyUrl').value.trim(),
+      email:       document.getElementById('email').value.trim(),
+      invoice:     document.getElementById('invoice').value.trim(),
+      submitted:   new Date().toISOString(),
+    };
+
+    try {
+      await fetch(NOTIFY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+    } catch(err) {
+      console.warn('Notify error:', err);
+    }
+
+    document.getElementById('mainPage').style.display = 'none';
+    document.getElementById('successScreen').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    setTimeout(function() {
+      window.location.href = STRIPE_LINK;
+    }, 2000);
+  });
+</script>
+</body>
+</html>
