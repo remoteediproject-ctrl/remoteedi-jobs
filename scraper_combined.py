@@ -41,7 +41,7 @@ def is_real_edi_job(title: str) -> bool:
 
 
 def categorize_job(title: str, description: str) -> str:
-    text = (title + " " + description).lower()
+    text = ((title or "") + " " + (description or "")).lower()
     if any(k in text for k in ["837", "835", "834", "270", "271", "hipaa", "healthcare", "medicaid", "medicare"]):
         return "Healthcare EDI"
     elif any(k in text for k in ["sap", "idoc"]):
