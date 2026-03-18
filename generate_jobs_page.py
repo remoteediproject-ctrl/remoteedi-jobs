@@ -416,6 +416,14 @@ def generate_html(jobs: list) -> str:
       nav {{ padding: 0 1rem; }}
     }}
   </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DXK8H3QW81"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+    gtag('config', 'G-DXK8H3QW81');
+  </script>
 </head>
 <body>
 
