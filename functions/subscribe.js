@@ -1,21 +1,25 @@
-// In-memory rate limit store (resets per worker instance)
+// Simple in-memory rate limit (MVP)
 const rateLimitStore = new Map();
 
 function isRateLimited(ip) {
   const now = Date.now();
-  const windowMs = 60 * 60 * 1000; // 1 hour
-  const maxRequests = 3;
+  const windowMs = 60 * 60 * 1000; // 1h
+  const maxRequests = 5;
 
   const record = rateLimitStore.get(ip);
+
   if (!record) {
     rateLimitStore.set(ip, { count: 1, resetAt: now + windowMs });
     return false;
   }
+
   if (now > record.resetAt) {
     rateLimitStore.set(ip, { count: 1, resetAt: now + windowMs });
     return false;
   }
+
   if (record.count >= maxRequests) return true;
+
   record.count++;
   return false;
 }
@@ -28,6 +32,16 @@ export async function onRequestPost(context) {
   const { request, env } = context;
 
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const ua = request.headers.get('User-Agent') || 'unknown';
+
+  // 🚫 basic bot fingerprint
+  if (!ua || ua.length < 10) {
+    return new Response(JSON.stringify({ error: 'Blocked' }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
   if (isRateLimited(ip)) {
     return new Response(JSON.stringify({ error: 'Too many requests' }), {
       status: 429,
@@ -36,10 +50,11 @@ export async function onRequestPost(context) {
   }
 
   let email;
+
   try {
     const body = await request.json();
     email = (body.email || '').trim().toLowerCase();
-  } catch(e) {
+  } catch {
     return new Response(JSON.stringify({ error: 'Invalid request' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' }
@@ -61,25 +76,32 @@ export async function onRequestPost(context) {
         'api-key': env.BREVO_API_KEY
       },
       body: JSON.stringify({
-        email: email,
+        email,
         listIds: [2],
         updateEnabled: true
       })
     });
+
+    // 📊 log (ważne!)
+    console.log('SUBSCRIBE:', email, ip);
 
     if (res.ok || res.status === 204) {
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       });
-    } else {
-      const data = await res.json();
-      return new Response(JSON.stringify({ error: data.message || 'Error' }), {
-        status: res.status,
-        headers: { 'Content-Type': 'application/json' }
-      });
     }
-  } catch(e) {
+
+    const data = await res.json();
+
+    return new Response(JSON.stringify({
+      error: data.message || 'Brevo error'
+    }), {
+      status: res.status,
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (e) {
     return new Response(JSON.stringify({ error: 'Internal error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
