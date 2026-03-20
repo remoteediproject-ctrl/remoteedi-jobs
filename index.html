@@ -195,6 +195,9 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* Honeypot — hidden from humans */
+    .hp-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; height: 0; overflow: hidden; }
+
     @media (max-width: 768px) {
       nav { padding: 0 1rem; }
       .hero { padding: 6rem 1rem 3rem; min-height: auto; }
@@ -242,7 +245,11 @@
   <div class="subscribe-wrap">
     <div class="subscribe-form">
       <input type="email" id="heroEmail" placeholder="your@email.com" autocomplete="email">
-      <button onclick="subscribe()">Get Free Alerts</button>
+      <!-- Honeypot -->
+    <div class="hp-field" aria-hidden="true">
+      <input type="text" id="hp_website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+    <button onclick="subscribe()">Get Free Alerts</button>
     </div>
     <p class="form-note">Free forever · Unsubscribe anytime</p>
     <div class="form-success" id="formSuccess">✓ You're on the list — check your inbox to confirm.</div>
@@ -353,6 +360,9 @@
     const email = document.getElementById('heroEmail').value.trim();
     const input = document.getElementById('heroEmail');
     const btn = document.querySelector('.subscribe-form button');
+
+    // Honeypot check
+    if (document.getElementById('hp_website').value !== '') return;
 
     if (!email || !email.includes('@')) {
       input.style.borderColor = '#e17055';
