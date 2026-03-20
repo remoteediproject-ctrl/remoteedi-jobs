@@ -356,13 +356,21 @@
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const formStartTime = Date.now();
+
   async function subscribe() {
     const email = document.getElementById('heroEmail').value.trim();
     const input = document.getElementById('heroEmail');
     const btn = document.querySelector('.subscribe-form button');
 
-    // Honeypot check
+    // Honeypot
     if (document.getElementById('hp_website').value !== '') return;
+
+    // Time trap (boty odpadają)
+    if (Date.now() - formStartTime < 2000) {
+      console.warn('Too fast — bot suspected');
+      return;
+    }
 
     if (!email || !email.includes('@')) {
       input.style.borderColor = '#e17055';
@@ -380,7 +388,7 @@
       res = await fetch('/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email })
+        body: JSON.stringify({ email })
       });
 
       if (!res.ok) {
@@ -393,7 +401,6 @@
 
         console.error('Subscribe error:', data.error);
 
-        // ⛔ przy błędzie odblokuj przycisk
         btn.textContent = 'Get Free Alerts';
         btn.disabled = false;
 
@@ -403,17 +410,21 @@
     } catch (e) {
       console.error('Subscribe fetch error:', e);
 
-      // ⛔ przy błędzie odblokuj przycisk
       btn.textContent = 'Get Free Alerts';
       btn.disabled = false;
 
       return;
     }
 
-    // ✅ sukces tylko jeśli faktycznie OK
+    // ✅ SUCCESS
     document.querySelector('.subscribe-form').style.display = 'none';
     document.querySelector('.form-note').style.display = 'none';
     document.getElementById('formSuccess').style.display = 'block';
+
+    // 📊 tracking
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'subscribe_success');
+    }
   }
 
   document.getElementById('heroEmail').addEventListener('keydown', function(e) {
