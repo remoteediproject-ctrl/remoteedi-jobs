@@ -349,9 +349,6 @@
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  const BREVO_KEY  = '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';
-  const BREVO_LIST = 2;
-
   async function subscribe() {
     const email = document.getElementById('heroEmail').value.trim();
     const input = document.getElementById('heroEmail');
@@ -366,19 +363,19 @@
     btn.disabled = true;
 
     try {
-      await fetch('https://api.brevo.com/v3/contacts', {
+      const res = await fetch('/functions/subscribe', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key': BREVO_KEY
-        },
-        body: JSON.stringify({
-          email: email,
-          listIds: [BREVO_LIST],
-          updateEnabled: true
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
       });
-    } catch(e) {}
+
+      if (!res.ok) {
+        const data = await res.json();
+        console.error('Subscribe error:', data.error);
+      }
+    } catch(e) {
+      console.error('Subscribe fetch error:', e);
+    }
 
     document.querySelector('.subscribe-form').style.display = 'none';
     document.querySelector('.form-note').style.display = 'none';
