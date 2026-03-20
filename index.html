@@ -352,18 +352,22 @@
   async function subscribe() {
     const email = document.getElementById('heroEmail').value.trim();
     const input = document.getElementById('heroEmail');
+    const btn = document.querySelector('.subscribe-form button');
+
     if (!email || !email.includes('@')) {
       input.style.borderColor = '#e17055';
       input.focus();
       return;
     }
+
     input.style.borderColor = '';
-    const btn = document.querySelector('.subscribe-form button');
     btn.textContent = '...';
     btn.disabled = true;
 
+    let res;
+
     try {
-      const res = await fetch('/subscribe', {
+      res = await fetch('/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email })
@@ -376,20 +380,30 @@
         } catch {
           data = { error: 'Invalid response' };
         }
+
         console.error('Subscribe error:', data.error);
+
+        // ⛔ przy błędzie odblokuj przycisk
+        btn.textContent = 'Get Free Alerts';
+        btn.disabled = false;
+
+        return;
       }
-    } catch(e) {
+
+    } catch (e) {
       console.error('Subscribe fetch error:', e);
+
+      // ⛔ przy błędzie odblokuj przycisk
+      btn.textContent = 'Get Free Alerts';
+      btn.disabled = false;
+
+      return;
     }
 
-    if (res.ok) {
-      document.querySelector('.subscribe-form').style.display = 'none';
-      document.querySelector('.form-note').style.display = 'none';
-      document.getElementById('formSuccess').style.display = 'block';
-    } else {
-      console.error('Subscribe failed');
-    }
-    
+    // ✅ sukces tylko jeśli faktycznie OK
+    document.querySelector('.subscribe-form').style.display = 'none';
+    document.querySelector('.form-note').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
   }
 
   document.getElementById('heroEmail').addEventListener('keydown', function(e) {
