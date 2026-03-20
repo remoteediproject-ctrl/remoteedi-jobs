@@ -377,9 +377,14 @@
       console.error('Subscribe fetch error:', e);
     }
 
-    document.querySelector('.subscribe-form').style.display = 'none';
-    document.querySelector('.form-note').style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
+    if (res.ok) {
+      document.querySelector('.subscribe-form').style.display = 'none';
+      document.querySelector('.form-note').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    } else {
+      console.error('Subscribe failed');
+    }
+    
   }
 
   document.getElementById('heroEmail').addEventListener('keydown', function(e) {
