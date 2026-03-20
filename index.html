@@ -370,7 +370,12 @@
       });
 
       if (!res.ok) {
-        const data = await res.json();
+        let data;
+        try {
+          data = await res.json();
+        } catch {
+          data = { error: 'Invalid response' };
+        }
         console.error('Subscribe error:', data.error);
       }
     } catch(e) {
