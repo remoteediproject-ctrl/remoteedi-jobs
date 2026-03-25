@@ -244,10 +244,12 @@ def run_jsearch():
                 "title": title,
                 "company": j.get("employer_name", ""),
                 "location": "Remote",
+                "salary": "",
                 "posted": datetime.date.today().isoformat(),
                 "url": j.get("job_apply_link"),
                 "source": "JSearch",
-                "specialization": categorize_job(title, j.get("job_description", ""))
+                "specialization": categorize_job(title, j.get("job_description", "")),
+                "tags": ""
             })
 
 
@@ -386,13 +388,20 @@ def main():
     jobs += run_dice()
 
     print("\nTOTAL:", len(jobs))
+    
+    # Polacz i deduplikuj
+    all_jobs = jobs
+    print(f"\nLacznie przed deduplication: {len(all_jobs)}")
 
+    unique = deduplicate(all_jobs)
+    print(f"Po deduplication: {len(unique)}")
+    
     keys = ["title","company","location","salary", "posted","url","specialization", "source", "tags"]
 
     with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=keys)
         writer.writeheader()
-        writer.writerows(jobs)
+        writer.writerows(unique)
 
 
 if __name__ == "__main__":
