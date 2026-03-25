@@ -3,125 +3,222 @@ import csv
 import datetime
 import time
 import os
-import smtplib
 import json
-from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
-
-# ── API KEYS ─────────────────────
-
-ADZUNA_APP_ID  = os.environ.get("ADZUNA_APP_ID",  "03049e54")
-ADZUNA_APP_KEY = os.environ.get("ADZUNA_APP_KEY", "03494e483e28beff7d8ee54573bac109")
-JSEARCH_KEY    = os.environ.get("JSEARCH_KEY",    "fd093a3128msh485b2b1ce1651c6p108b94jsn4e84230e71cc")
 
 OUTPUT_FILE = "edi_jobs_all.csv"
 CACHE_FILE = "jsearch_cache.json"
 
-# ── EMAIL CONFIG ─────────────────────
-EMAIL = os.environ.get("EMAIL", "")
-EMAIL_PASS = os.environ.get("EMAIL_PASS", "")
+# 🔥 TU WPISZ SWOJE KLUCZE (nie ENV)
+ADZUNA_APP_ID  = os.environ.get("ADZUNA_APP_ID",  "03049e54")
+ADZUNA_APP_KEY = os.environ.get("ADZUNA_APP_KEY", "03494e483e28beff7d8ee54573bac109")
+JSEARCH_KEY    = os.environ.get("JSEARCH_KEY",    "fd093a3128msh485b2b1ce1651c6p108b94jsn4e84230e71cc")
 
-# ── HELPERS ─────────────────────
+
+# ── CACHE RESET ─────────────────────
+
+if os.path.exists(CACHE_FILE):
+    os.remove(CACHE_FILE)
+    print("🧹 Cache cleared")
+
+
+# ── Helpery ───────────────────────────────────────────────────────────────────
 
 def is_real_edi_job(title: str) -> bool:
     t = title.lower()
-    return any(x in t for x in ["edi", "x12", "edifact", "idoc"])
+    for term in ["edi ", " edi", "/edi", "edi/", "electronic data interchange", "x12", "edifact", "idoc"]:
+        if term in t:
+            return True
+    return False
+
+# ── CLASSIFICATION ─────────────────────
+
+def categorize_job(title: str, description: str) -> str:
+    text = ((title or "") + " " + (description or "")).lower()
+    if any(k in text for k in ["837", "835", "834", "270", "271", "hipaa", "healthcare", "medicaid", "medicare"]):
+        return "Healthcare EDI"
+    elif any(k in text for k in ["sap", "idoc"]):
+        return "SAP EDI"
+    elif any(k in text for k in ["850", "856", "logistics", "retail", "warehouse", "3pl", "supply chain"]):
+        return "Logistics & Retail"
+    elif any(k in text for k in ["developer", "engineer", "programmer", "mapping"]):
+        return "EDI Developer"
+    elif any(k in text for k in ["analyst", "specialist"]):
+        return "EDI Analyst"
+    elif any(k in text for k in ["coordinator"]):
+        return "EDI Coordinator"
+    else:
+        return "EDI General"
+
+def normalize_title(title: str) -> str:
+    """Upraszcza tytul do porownania - usuwa szczegoly w nawiasach."""
+    import re
+    t = title.lower().strip()
+    t = re.sub(r"[\(\[].*?[\)\]]", "", t)  # usuwa (Remote), (Work from Home) etc
+    t = re.sub(r"\s+", " ", t).strip()
+    return t
+
+def deduplicate(jobs: list) -> list:
+    """Deduplikuje po znormalizowanym tytule + firmie."""
+    seen = set()
+    unique = []
+    for job in jobs:
+        key = (normalize_title(job["title"]), job["company"].lower().strip())
+        if key not in seen:
+            seen.add(key)
+            unique.append(job)
+    return unique
 
 
-# ── CACHE ─────────────────────
+def is_edi(title):
+    return "edi" in title.lower()
 
-def load_cache():
+
+# ════════════════════════════════════════════════════════════════════════════
+# ADZUNA SCRAPER
+# ════════════════════════════════════════════════════════════════════════════
+
+# Kraje Adzuna z kodem i nazwa
+ADZUNA_COUNTRIES = [
+    ("us", "USA"),
+    ("gb", "UK"),
+    ("ca", "Canada"),
+    ("au", "Australia"),
+    ("de", "Germany"),
+    ("nl", "Netherlands"),
+]
+
+ADZUNA_QUERIES = [
+    "EDI analyst",
+    "EDI developer",
+    "EDI specialist",
+    "EDI engineer",
+    "EDI coordinator",
+    "electronic data interchange",
+]
+
+def fetch_adzuna(query: str, country_code: str, country_name: str) -> list:
+    url = f"https://api.adzuna.com/v1/api/jobs/{country_code}/search/1"
+    params = {
+        "app_id":           ADZUNA_APP_ID,
+        "app_key":          ADZUNA_APP_KEY,
+        "what":             query,
+        "results_per_page": 50,
+        "sort_by":          "date",
+        "full_time":        1,
+        "content-type":     "application/json",
+    }
     try:
-        with open(CACHE_FILE, "r") as f:
-            return json.load(f)
+        r = requests.get(url, params=params, timeout=15)
+        r.raise_for_status()
+        return r.json().get("results", [])
     except:
-        return {}
-
-def save_cache(cache):
-    with open(CACHE_FILE, "w") as f:
-        json.dump(cache, f)
+        return []
 
 
-# ── SAFE REQUEST ─────────────────────
-
-def safe_request(url, headers=None, params=None):
-    for attempt in range(3):
-        try:
-            r = requests.get(url, headers=headers, params=params, timeout=30)
-
-            if r.status_code == 401:
-                print("    ❌ 401 Unauthorized")
-                return None
-
-            if r.status_code == 429:
-                wait = 2 ** attempt
-                print(f"    ⚠️ 429 → retry in {wait}s")
-                time.sleep(wait)
-                continue
-
-            r.raise_for_status()
-            return r
-
-        except Exception as e:
-            print(f"    x Error: {e}")
-            time.sleep(2)
-
-    return None
+COUNTRY_CURRENCY = {
+    "USA":         ("$",  ""),
+    "UK":          ("£",  ""),
+    "Canada":      ("CA$",""),
+    "Australia":   ("A$", ""),
+    "Germany":     ("€",  ""),
+    "Netherlands": ("€",  ""),
+}
 
 
-# ── ADZUNA ─────────────────────
+def parse_adzuna_job(job: dict, country_name: str) -> dict:
+    title   = job.get("title", "").strip()
+    company = job.get("company", {}).get("display_name", "")
+    location_data = job.get("location", {})
+    loc_display = location_data.get("display_name", "")
+    description = job.get("description", "")
+    url = job.get("redirect_url", "")
 
-def run_adzuna():
-    print("\n── ADZUNA ──")
-    jobs = []
+    if not is_real_edi_job(title):
+        return None
 
-    queries = ["EDI analyst", "EDI developer"]
+    # Wyklucz aggregatory
+    aggregators = ["jobgether", "jooble", "talent.com", "jobrapido", "neuvoo"]
+    if any(a in company.lower() for a in aggregators):
+        return None
 
-    for q in queries:
-        url = "https://api.adzuna.com/v1/api/jobs/us/search/1"
+    # Remote filter
+    remote_terms = ["remote", "work from home", "wfh", "telework"]
+    is_remote = (
+        any(t in title.lower() for t in remote_terms) or
+        any(t in description.lower()[:800] for t in remote_terms) or
+        loc_display.strip().lower() in ["us", "gb", "ca", "au", "de", "nl", ""]
+    )
+    if not is_remote:
+        # Dla krajow poza US bądź bardziej elastyczny — "US" to jasny signal
+        if country_name != "USA":
+            is_remote = True  # inne kraje — zakładamy remote jeśli Adzuna zwrócił
 
-        params = {
-            "app_id": ADZUNA_APP_ID,
-            "app_key": ADZUNA_APP_KEY,
-            "what": q,
-            "results_per_page": 20,
-        }
+    if not is_remote:
+        return None
 
-        r = safe_request(url, params=params)
-        if not r:
-            continue
+    # Salary z poprawna waluta
+    s_min = job.get("salary_min")
+    s_max = job.get("salary_max")
+    symbol = COUNTRY_CURRENCY.get(country_name, ("$", ""))[0]
+    if s_min and s_max and int(s_min) != int(s_max):
+        salary = f"{symbol}{int(s_min):,} - {symbol}{int(s_max):,}"
+    else:
+        salary = ""
 
-        results = r.json().get("results", [])
+    # Data
+    created = job.get("created", "")
+    try:
+        dt = datetime.datetime.fromisoformat(created.replace("Z", "+00:00"))
+        posted = dt.date().isoformat()
+    except:
+        posted = datetime.date.today().isoformat()
 
-        for job in results:
-            title = job.get("title", "")
-            if not is_real_edi_job(title):
-                continue
+    # Lokalizacja
+    if any(t in title.lower() + description.lower()[:300] for t in ["remote", "work from home"]):
+        location = f"Remote {country_name}"
+    elif loc_display and loc_display.upper() not in ["US", "GB", "CA", "AU", "DE", "NL"]:
+        location = f"{loc_display}, {country_name}"
+    else:
+        location = f"Remote {country_name}"
 
-            jobs.append({
-                "title": title,
-                "company": job.get("company", {}).get("display_name", ""),
-                "location": "Remote USA",
-                "posted": datetime.date.today().isoformat(),
-                "url": job.get("redirect_url", ""),
-                "source": "Adzuna"
-            })
+    return {
+        "title":          title,
+        "company":        company,
+        "location":       location,
+        "salary":         salary,
+        "posted":         posted,
+        "url":            url,
+        "specialization": categorize_job(title, description),
+        "source":         "Adzuna",
+        "tags":           "",
+    }
 
-        time.sleep(1)
 
-    print(f"  Adzuna jobs: {len(jobs)}")
-    return jobs
+def run_adzuna() -> list:
+    print("\n── ADZUNA ──────────────────────────────────────")
+    all_jobs = []
+
+    for country_code, country_name in ADZUNA_COUNTRIES:
+        print(f"\n  [{country_name}]")
+        for query in ADZUNA_QUERIES:
+            results = fetch_adzuna(query, country_code, country_name)
+            for r in results:
+                job = parse_adzuna_job(r, country_name)
+                if job:
+                    all_jobs.append(job)
+            time.sleep(0.5)
+
+    print(f"\n  Adzuna total: {len(all_jobs)} jobów (przed dedup)")
+    return all_jobs
 
 
 # ── JSEARCH ─────────────────────
 
-JSEARCH_QUERIES = [
-    "EDI analyst remote",
-    "EDI developer remote",
-    "EDI specialist remote",
-]
+def run_jsearch():
+    print("\n── JSEARCH ──")
+    jobs = []
 
-def fetch_jsearch(query: str) -> list:
     url = "https://jsearch.p.rapidapi.com/search"
 
     headers = {
@@ -130,233 +227,172 @@ def fetch_jsearch(query: str) -> list:
     }
 
     params = {
-        "query": query,
-        "page": 1,
-        "num_pages": 1,
-        "date_posted": "month",
-        "remote_jobs_only": "true",
+        "query": "EDI remote",
+        "num_pages": 1
     }
-
-    r = safe_request(url, headers=headers, params=params)
-
-    if not r:
-        return []
 
     try:
-        return r.json().get("data", [])
-    except:
-        return []
+        r = requests.get(url, headers=headers, params=params)
+        data = r.json().get("data", [])
+
+        for j in data:
+            title = j.get("job_title", "")
+            if not is_edi(title):
+                continue
+
+            jobs.append({
+                "title": title,
+                "company": j.get("employer_name", ""),
+                "location": "Remote",
+                "posted": datetime.date.today().isoformat(),
+                "url": j.get("job_apply_link"),
+                "source": "JSearch",
+                "specialization": categorize_job(title, j.get("job_description", ""))
+            })
 
 
-def parse_jsearch_job(job: dict) -> dict:
-    title = job.get("job_title", "")
-    if not is_real_edi_job(title):
-        return None
 
-    return {
-        "title": title,
-        "company": job.get("employer_name", ""),
-        "location": "Remote",
-        "posted": datetime.date.today().isoformat(),
-        "url": job.get("job_apply_link") or "",
-        "source": "JSearch"
-    }
+    except Exception as e:
+        print("JSearch error:", e)
 
-
-def run_jsearch():
-    print("\n── JSEARCH ──")
-    jobs = []
-
-    cache = load_cache()
-    today = datetime.date.today().isoformat()
-
-    for query in JSEARCH_QUERIES:
-        print(f"  → {query}")
-
-        if query in cache and cache[query]["date"] == today:
-            results = cache[query]["data"]
-            print("    (cache hit)")
-        else:
-            results = fetch_jsearch(query)
-            cache[query] = {
-                "date": today,
-                "data": results
-            }
-            save_cache(cache)
-
-        print(f"    {len(results)} wyników")
-
-        for r in results:
-            job = parse_jsearch_job(r)
-            if job:
-                jobs.append(job)
-
-        time.sleep(1)
-
-    print(f"  JSearch jobs: {len(jobs)}")
+    print("JSearch:", len(jobs))
     return jobs
 
 
-# ── DICE (FIXED) ─────────────────────
-
-DICE_QUERIES = ["edi+remote"]
-MAX_PAGES = 5
-
+# ── DICE (SPRAWDZONA WERSJA) ─────────────────────
 
 def run_dice():
     print("\n── DICE ──")
-
     jobs = []
 
-    for query in DICE_QUERIES:
-        print(f"  → {query}")
+    for page in range(1, 4):
+        url = f"https://www.dice.com/jobs/q-edi+remote-jobs?page={page}"
 
-        for page in range(1, MAX_PAGES + 1):
-            print(f"     page {page}")
+        try:
+            r = requests.get(
+                url,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-US,en;q=0.9"
+                },
+                timeout=30
+            )
 
-            url = f"https://www.dice.com/jobs/q-{query}-jobs?page={page}"
+            soup = BeautifulSoup(r.text, "html.parser")
 
-            try:
-                r = requests.get(
-                    url,
-                    headers={
-                        "User-Agent": "Mozilla/5.0",
-                        "Accept-Language": "en-US,en;q=0.9"
-                    },
-                    timeout=30
-                )
+            # 🔥 TRY 1: cards
+            cards = soup.select("div.card")
 
-                print(f"     status: {r.status_code}")
-
-                if r.status_code != 200:
-                    break
-
-                soup = BeautifulSoup(r.text, "html.parser")
-
-                cards = soup.select("div.card") or soup.select("a[href*='/job-detail/']")
-
-                print(f"     cards: {len(cards)}")
-
-                if len(cards) == 0:
-                    print("     ⛔ stop")
-                    break
+            if cards:
+                print(f"page {page}: {len(cards)} cards")
 
                 for card in cards:
                     try:
-                        title_el = card.select_one("a.card-title-link") if "card" in (card.get("class") or []) else card
+                        title_el = card.select_one("a.card-title-link")
+                        if not title_el:
+                            continue
 
                         title = title_el.text.strip()
-
-                        if not is_real_edi_job(title):
+                        if not is_edi(title):
                             continue
 
                         href = title_el.get("href")
                         if not href:
                             continue
 
-                        full_url = href if href.startswith("http") else "https://www.dice.com" + href
+                        url = href if href.startswith("http") else "https://www.dice.com" + href
+
+                        company_el = card.select_one(".card-company")
+                        company = company_el.text.strip() if company_el else ""
+
+                        location_el = card.select_one(".card-location")
+                        location = location_el.text.strip() if location_el else "Remote"
+
+                        salary_el = card.select_one(".card-salary")
+                        salary = salary_el.text.strip() if salary_el else ""
+
+                        tags = ",".join([k for k in ["edi","sap","boomi","mulesoft","x12","edifact"] if k in title.lower()])
 
                         jobs.append({
                             "title": title,
-                            "company": "",
-                            "location": "Remote",
+                            "company": company,
+                            "location": location,
+                            "salary": salary,
                             "posted": datetime.date.today().isoformat(),
-                            "url": full_url,
-                            "source": "Dice"
+                            "url": url,
+                            "specialization": categorize_job(title, ""),
+                            "source": "Dice",
+                            "tags": tags
                         })
 
                     except:
                         continue
 
-                time.sleep(1)
+            else:
+                # 🔥 FALLBACK: link-only parsing
+                links = soup.select("a[href*='/job-detail/']")
+                print(f"page {page}: fallback {len(links)} links")
 
-            except Exception as e:
-                print("     ❌ error:", e)
-                break
+                if not links:
+                    break
 
-    print(f"  Dice jobs: {len(jobs)}")
+                for l in links:
+                    try:
+                        title = l.text.strip()
+                        if not is_edi(title):
+                            continue
+
+                        href = l.get("href")
+                        if not href:
+                            continue
+
+                        url = href if href.startswith("http") else "https://www.dice.com" + href
+
+                        tags = ",".join([k for k in ["edi","sap","boomi","mulesoft","x12","edifact"] if k in title.lower()])
+
+                        jobs.append({
+                            "title": title,
+                            "company": "",
+                            "location": "Remote",
+                            "salary": "",
+                            "posted": datetime.date.today().isoformat(),
+                            "url": url,
+                            "specialization": categorize_job(title, ""),
+                            "source": "Dice",
+                            "tags": tags
+                        })
+
+                    except:
+                        continue
+
+            time.sleep(1)
+
+        except Exception as e:
+            print("Dice error:", e)
+
+    print("Dice:", len(jobs))
     return jobs
-
-
-# ── DEDUP ─────────────────────
-
-def deduplicate(jobs):
-    seen = set()
-    unique = []
-
-    for j in jobs:
-        key = j["url"]
-
-        if key in seen:
-            continue
-
-        seen.add(key)
-        unique.append(j)
-
-    return unique
-
-
-# ── CSV ─────────────────────
-
-def save_csv(jobs):
-    keys = ["title", "company", "location", "posted", "url", "source"]
-
-    with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=keys)
-        writer.writeheader()
-        writer.writerows(jobs)
-
-
-# ── EMAIL ─────────────────────
-
-def send_email(summary):
-    if not EMAIL or not EMAIL_PASS:
-        print("📭 Email skipped (no config)")
-        return
-
-    msg = MIMEText(summary)
-    msg["Subject"] = "EDI Scraper Report"
-    msg["From"] = EMAIL
-    msg["To"] = EMAIL
-
-    try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(EMAIL, EMAIL_PASS)
-            server.send_message(msg)
-        print("📧 Email sent")
-    except Exception as e:
-        print("❌ Email error:", e)
 
 
 # ── MAIN ─────────────────────
 
 def main():
-    print("🚀 RemoteEDI Scraper")
+    print("🚀 RemoteEDI.com — Combined Scraper")
+    print(f"Start: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}")
 
-    adzuna_jobs = run_adzuna()
-    jsearch_jobs = run_jsearch()
-    dice_jobs = run_dice()
+    jobs = []
+    jobs += run_adzuna()
+    #jobs += run_jsearch()
+    jobs += run_dice()
 
-    all_jobs = adzuna_jobs + jsearch_jobs + dice_jobs
-    final_jobs = deduplicate(all_jobs)
+    print("\nTOTAL:", len(jobs))
 
-    print(f"\nTOTAL RAW: {len(all_jobs)}")
-    print(f"TOTAL UNIQUE: {len(final_jobs)}")
+    keys = ["title","company","location","salary", "posted","url","specialization", "source", "tags"]
 
-    save_csv(final_jobs)
-
-    summary = f"""
-EDI SCRAPER REPORT
-
-Total unique jobs: {len(final_jobs)}
-Adzuna: {len(adzuna_jobs)}
-JSearch: {len(jsearch_jobs)}
-Dice: {len(dice_jobs)}
-
-Time: {datetime.datetime.now()}
-"""
-
-    send_email(summary)
+    with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=keys)
+        writer.writeheader()
+        writer.writerows(jobs)
 
 
 if __name__ == "__main__":
