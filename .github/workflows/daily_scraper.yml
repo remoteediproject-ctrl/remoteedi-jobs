@@ -24,7 +24,7 @@ jobs:
 
       # 3. Zaleznosci
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests beautifulsoup4
 
       # 4. Uruchom scraper
       - name: Run scraper
