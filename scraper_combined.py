@@ -5,6 +5,7 @@ import time
 import os
 import json
 from bs4 import BeautifulSoup
+import re
 
 OUTPUT_FILE = "edi_jobs_all.csv"
 CACHE_FILE = "jsearch_cache.json"
@@ -30,6 +31,21 @@ def is_real_edi_job(title: str) -> bool:
         if term in t:
             return True
     return False
+
+def is_relevant(title):
+    t = title.lower()
+
+    keywords = [
+        "edi",
+        "integration",
+        "sap",
+        "boomi",
+        "mulesoft",
+        "b2b",
+        "idoc"
+    ]
+
+    return any(k in t for k in keywords)
 
 # ── CLASSIFICATION ─────────────────────
 
@@ -261,119 +277,205 @@ def run_jsearch():
     return jobs
 
 
-# ── DICE (SPRAWDZONA WERSJA) ─────────────────────
 
-def run_dice():
-    print("\n── DICE ──")
+# ── DICE SCRAPER ─────────────────────────────────────────
+
+DICE_QUERIES = ["edi+remote"]
+DICE_MAX_PAGES = 5
+DICE_HEADERS = {"User-Agent": "Mozilla/5.0"}
+
+def fetch_page(query, page):
+    url = f"https://www.dice.com/jobs/q-{query}-jobs?page={page}"
+
+    r = requests.get(url, headers=DICE_HEADERS)
+
+    if r.status_code != 200:
+        print("❌ Failed:", r.status_code)
+        return None
+
+    return r.text
+
+def parse_posted_date(date_text):
+    """
+    Konwertuje tekst 'Posted 2 days ago' na datę ISO
+    """
+    if not date_text:
+        return datetime.date.today().isoformat()
+    
+    date_text = date_text.lower().strip()
+    today = datetime.date.today()
+    
+    if "today" in date_text or "just posted" in date_text:
+        return today.isoformat()
+    
+    if "yesterday" in date_text:
+        return (today - datetime.timedelta(days=1)).isoformat()
+    
+    # "Posted 2 days ago", "2 days ago", "3d ago"
+    import re
+    
+    # Szukamy liczby
+    match = re.search(r'(\d+)\s*(day|d|hour|h|week|w|month|mo)', date_text)
+    if match:
+        num = int(match.group(1))
+        unit = match.group(2)
+        
+        if unit.startswith('d'):
+            delta = datetime.timedelta(days=num)
+        elif unit.startswith('h'):
+            delta = datetime.timedelta(hours=num)
+        elif unit.startswith('w'):
+            delta = datetime.timedelta(weeks=num)
+        elif unit.startswith('mo'):
+            delta = datetime.timedelta(days=num * 30)  # przybliżenie
+        else:
+            delta = datetime.timedelta(days=0)
+        
+        return (today - delta).isoformat()
+    
+    # Fallback
+    return today.isoformat()
+
+
+def parse(html):
+    soup = BeautifulSoup(html, "html.parser")
     jobs = []
 
-    for page in range(1, 4):
-        url = f"https://www.dice.com/jobs/q-edi+remote-jobs?page={page}"
+    # Dice ma strukturę: każda oferta to link a[href*='/job-detail/']
+    # ALE musimy znaleźć cały kontener z metadanymi
+    
+    # Znajdź wszystkie linki do ofert
+    job_links = soup.select("a[href*='/job-detail/']")
+    
+    print(f"      DEBUG: Znaleziono {len(job_links)} linków do ofert")
 
+    for job_link in job_links:
         try:
-            r = requests.get(
-                url,
-                headers={
-                    "User-Agent": "Mozilla/5.0",
-                    "Accept-Language": "en-US,en;q=0.9"
-                },
-                timeout=30
-            )
-
-            soup = BeautifulSoup(r.text, "html.parser")
-
-            # 🔥 TRY 1: cards
-            cards = soup.select("div.card")
-
-            if cards:
-                print(f"page {page}: {len(cards)} cards")
-
-                for card in cards:
-                    try:
-                        title_el = card.select_one("a.card-title-link")
-                        if not title_el:
-                            continue
-
-                        title = title_el.text.strip()
-                        if not is_edi(title):
-                            continue
-
-                        href = title_el.get("href")
-                        if not href:
-                            continue
-
-                        url = href if href.startswith("http") else "https://www.dice.com" + href
-
-                        company_el = card.select_one(".card-company")
-                        company = company_el.text.strip() if company_el else ""
-
-                        location_el = card.select_one(".card-location")
-                        location = location_el.text.strip() if location_el else "Remote"
-
-                        salary_el = card.select_one(".card-salary")
-                        salary = salary_el.text.strip() if salary_el else ""
-
-                        tags = ",".join([k for k in ["edi","sap","boomi","mulesoft","x12","edifact"] if k in title.lower()])
-
-                        jobs.append({
-                            "title": title,
-                            "company": company,
-                            "location": location,
-                            "salary": salary,
-                            "posted": datetime.date.today().isoformat(),
-                            "url": url,
-                            "specialization": categorize_job(title, ""),
-                            "source": "Dice",
-                            "tags": tags
-                        })
-
-                    except:
-                        continue
-
+            # URL
+            href = job_link.get("href")
+            if not href:
+                continue
+                
+            if href.startswith("http"):
+                full_url = href
             else:
-                # 🔥 FALLBACK: link-only parsing
-                links = soup.select("a[href*='/job-detail/']")
-                print(f"page {page}: fallback {len(links)} links")
+                full_url = "https://www.dice.com" + href
 
-                if not links:
+            # Cała karta - szukamy rodzica który zawiera wszystkie dane
+            # Zazwyczaj 2-4 poziomy wyżej od linka
+            card = job_link.parent
+            for _ in range(4):
+                if card and card.parent:
+                    card = card.parent
+                else:
                     break
+            
+            # TYTUŁ - jest w samym linku job_link
+            title = job_link.get_text(strip=True)
+            
+            if len(title) < 5:
+                continue
 
-                for l in links:
-                    try:
-                        title = l.text.strip()
-                        if not is_edi(title):
-                            continue
+            if not is_relevant(title):
+                continue
 
-                        href = l.get("href")
-                        if not href:
-                            continue
+            # FIRMA - szukamy w całej karcie
+            # Ze screenshota: link z nazwą firmy jest NAD tytułem oferty
+            company = ""
+            
+            # Metoda 1: link do company-profile
+            company_links = card.select("a[href*='/company-profile/']") if card else []
+            if company_links:
+                company = company_links[0].get_text(strip=True)
+            
+            # Metoda 2: data-wa-click
+            if not company and card:
+                company_link = card.select_one("a[data-wa-click='djv-job-company-profile-click']")
+                if company_link:
+                    company = company_link.get_text(strip=True)
+            
+            # Metoda 3: szukaj tekstu przed tytułem (fallback)
+            if not company and card:
+                # Wszystkie linki w karcie
+                all_links = card.find_all('a', href=True)
+                for link in all_links:
+                    link_text = link.get_text(strip=True)
+                    # Pomijamy linki które są tytułem oferty lub są za krótkie
+                    if link_text and link_text != title and len(link_text) > 3:
+                        # Jeśli link nie prowadzi do job-detail, to prawdopodobnie firma
+                        if '/job-detail/' not in link.get('href', ''):
+                            company = link_text
+                            break
 
-                        url = href if href.startswith("http") else "https://www.dice.com" + href
+            # LOKALIZACJA i DATA
+            # Ze screenshota: "Remote • Posted 8 days ago • Updated 8 days ago"
+            location = "Unknown"
+            posted = datetime.date.today().isoformat()
+            
+            if card:
+                # Szukamy tekstu z "Remote", "Posted", "ago"
+                card_text = card.get_text()
+                
+                # Lokalizacja - szukamy "Remote" lub miast
+                location_match = re.search(r'(Remote|Hybrid|On-site|[A-Z][a-z]+,\s*[A-Z]{2})', card_text)
+                if location_match:
+                    location = location_match.group(1).strip()
+                
+                # Data - szukamy "Posted X days ago"
+                date_match = re.search(r'Posted\s+(\d+)\s+(day|hour|week|month)s?\s+ago', card_text, re.IGNORECASE)
+                if date_match:
+                    posted = parse_posted_date(date_match.group(0))
+                elif 'Posted today' in card_text or 'Just posted' in card_text:
+                    posted = datetime.date.today().isoformat()
+                elif 'Posted yesterday' in card_text:
+                    posted = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
 
-                        tags = ",".join([k for k in ["edi","sap","boomi","mulesoft","x12","edifact"] if k in title.lower()])
-
-                        jobs.append({
-                            "title": title,
-                            "company": "",
-                            "location": "Remote",
-                            "salary": "",
-                            "posted": datetime.date.today().isoformat(),
-                            "url": url,
-                            "specialization": categorize_job(title, ""),
-                            "source": "Dice",
-                            "tags": tags
-                        })
-
-                    except:
-                        continue
-
-            time.sleep(1)
+            jobs.append({
+                "title": title,
+                "company": company,
+                "location": location,
+                "posted": posted,
+                "url": full_url,
+                "source": "Dice"
+            })
 
         except Exception as e:
-            print("Dice error:", e)
+            print(f"      ⚠️  Parse error: {e}")
+            continue
 
-    print("Dice:", len(jobs))
     return jobs
+
+
+
+def run_dice() -> list:
+    print("\n── DICE ──────────────────────────────────────")
+    all_jobs = []
+
+    for query in DICE_QUERIES:
+        print(f"  Szukam: '{query}'...")
+        for page in range(1, DICE_MAX_PAGES + 1):
+            html = fetch_page(query, page)
+            if not html:
+                break
+            parsed = parse(html)
+            if not parsed:
+                break
+            for j in parsed:
+                all_jobs.append({
+                    "title":          j["title"],
+                    "company":        j.get("company", ""),
+                    "location":       j.get("location", "Remote"),
+                    "salary":         "",
+                    "posted":         j.get("posted", datetime.date.today().isoformat()),
+                    "url":            j["url"],
+                    "specialization": categorize_job(j["title"], ""),
+                    "source":         "Dice",
+                    "tags":           "",
+                })
+            time.sleep(1)
+
+    print(f"  Dice total: {len(all_jobs)} jobów (przed dedup)")
+    return all_jobs
 
 
 # ── MAIN ─────────────────────
